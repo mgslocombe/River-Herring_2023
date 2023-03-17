@@ -4,32 +4,26 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>A Minimal Book Example</title>
-  <meta name="description" content="<p>This is a minimal example of using the bookdown package to write a book.
-The HTML output format for this example is bookdown::gitbook,
-set in the _output.yml file.</p>" />
+  <title>Juvenile River Herring: Diet, habitat, and food resources from the Connecticut River</title>
+  <meta name="description" content="This is a website for Meghan Slocombe’s honors thesis completed in 2020 at the University of Massachusetts Amherst." />
   <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="A Minimal Book Example" />
+  <meta property="og:title" content="Juvenile River Herring: Diet, habitat, and food resources from the Connecticut River" />
   <meta property="og:type" content="book" />
   
-  <meta property="og:description" content="<p>This is a minimal example of using the bookdown package to write a book.
-The HTML output format for this example is bookdown::gitbook,
-set in the _output.yml file.</p>" />
+  <meta property="og:description" content="This is a website for Meghan Slocombe’s honors thesis completed in 2020 at the University of Massachusetts Amherst." />
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="A Minimal Book Example" />
+  <meta name="twitter:title" content="Juvenile River Herring: Diet, habitat, and food resources from the Connecticut River" />
   
-  <meta name="twitter:description" content="<p>This is a minimal example of using the bookdown package to write a book.
-The HTML output format for this example is bookdown::gitbook,
-set in the _output.yml file.</p>" />
+  <meta name="twitter:description" content="This is a website for Meghan Slocombe’s honors thesis completed in 2020 at the University of Massachusetts Amherst." />
   
 
-<meta name="author" content="John Doe" />
+<meta name="author" content="Meghan Slocombe" />
 
 
-<meta name="date" content="2023-03-13" />
+<meta name="date" content="2023-03-17" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -37,7 +31,7 @@ set in the _output.yml file.</p>" />
   
   
 
-<link rel="next" href="hello-bookdown.html"/>
+<link rel="next" href="database-creation.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -161,21 +155,23 @@ div.csl-indent {
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">A Minimal Book Example</a></li>
+<li><a href="./">River Herring Research</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> About</a>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Juvenile river herring</a>
 <ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#usage"><i class="fa fa-check"></i><b>1.1</b> Usage</a></li>
-<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#render-book"><i class="fa fa-check"></i><b>1.2</b> Render book</a></li>
-<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#preview-book"><i class="fa fa-check"></i><b>1.3</b> Preview book</a></li>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#institution"><i class="fa fa-check"></i><b>1.1</b> Institution</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#study-sites"><i class="fa fa-check"></i><b>1.2</b> Study Sites</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="hello-bookdown.html"><a href="hello-bookdown.html"><i class="fa fa-check"></i><b>2</b> Hello bookdown</a>
+<li class="chapter" data-level="2" data-path="database-creation.html"><a href="database-creation.html"><i class="fa fa-check"></i><b>2</b> Database Creation</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="hello-bookdown.html"><a href="hello-bookdown.html#a-section"><i class="fa fa-check"></i><b>2.1</b> A section</a>
-<ul>
-<li class="chapter" data-level="" data-path="hello-bookdown.html"><a href="hello-bookdown.html#an-unnumbered-section"><i class="fa fa-check"></i>An unnumbered section</a></li>
-</ul></li>
+<li class="chapter" data-level="2.1" data-path="database-creation.html"><a href="database-creation.html#load-required-package-and-initate-database-building"><i class="fa fa-check"></i><b>2.1</b> Load required package and initate database building</a></li>
+<li class="chapter" data-level="2.2" data-path="database-creation.html"><a href="database-creation.html#create-fish-table"><i class="fa fa-check"></i><b>2.2</b> Create <strong>FISH</strong> table</a></li>
+<li class="chapter" data-level="2.3" data-path="database-creation.html"><a href="database-creation.html#create-envir-table"><i class="fa fa-check"></i><b>2.3</b> Create <strong>ENVIR</strong> table</a></li>
+<li class="chapter" data-level="2.4" data-path="database-creation.html"><a href="database-creation.html#create-diet-table"><i class="fa fa-check"></i><b>2.4</b> Create <strong>DIET</strong> table</a></li>
+<li class="chapter" data-level="2.5" data-path="database-creation.html"><a href="database-creation.html#create-diet_size-table"><i class="fa fa-check"></i><b>2.5</b> Create <strong>DIET_SIZE</strong> table</a></li>
+<li class="chapter" data-level="2.6" data-path="database-creation.html"><a href="database-creation.html#create-zp_biomass-table"><i class="fa fa-check"></i><b>2.6</b> Create <strong>ZP_BIOMASS</strong> table</a></li>
+<li class="chapter" data-level="2.7" data-path="database-creation.html"><a href="database-creation.html#create-zp_size-table"><i class="fa fa-check"></i><b>2.7</b> Create <strong>ZP_SIZE</strong> table</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="cross.html"><a href="cross.html"><i class="fa fa-check"></i><b>3</b> Cross-references</a>
 <ul>
@@ -213,7 +209,7 @@ div.csl-indent {
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Minimal Book Example</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Juvenile River Herring: Diet, habitat, and food resources from the Connecticut River</a>
           </h1>
         </div>
 
@@ -222,34 +218,33 @@ div.csl-indent {
 
             <section class="normal" id="section-">
 <div id="header">
-<h1 class="title">A Minimal Book Example</h1>
-<p class="author"><em>John Doe</em></p>
-<p class="date"><em>2023-03-13</em></p>
+<h1 class="title">Juvenile River Herring: Diet, habitat, and food resources from the Connecticut River</h1>
+<p class="author"><em>Meghan Slocombe</em></p>
+<p class="date"><em>2023-03-17</em></p>
 </div>
-<div id="about" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">Chapter 1</span> About<a href="index.html#about" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>This is a <em>sample</em> book written in <strong>Markdown</strong>. You can use anything that Pandoc’s Markdown supports; for example, a math equation <span class="math inline">\(a^2 + b^2 = c^2\)</span>.</p>
-<div id="usage" class="section level2 hasAnchor" number="1.1">
-<h2><span class="header-section-number">1.1</span> Usage<a href="index.html#usage" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Each <strong>bookdown</strong> chapter is an .Rmd file, and each .Rmd file can contain one (and only one) chapter. A chapter <em>must</em> start with a first-level heading: <code># A good chapter</code>, and can contain one (and only one) first-level heading.</p>
-<p>Use second-level and higher headings within chapters like: <code>## A short section</code> or <code>### An even shorter section</code>.</p>
-<p>The <code>index.Rmd</code> file is required, and is also your first book chapter. It will be the homepage when you render the book.</p>
+<div id="juvenile-river-herring" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">Chapter 1</span> Juvenile river herring<a href="index.html#juvenile-river-herring" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>River herring (alewife Alosa pseudoharengus and blueback herring A. aestivalis) are anadromous fish and juveniles feed on zooplankton during their residence in freshwater (Figure 1.1). In lakes with high densities of planktivores, juvenile river herring can deplete food resources. These shifting zooplankton densities may influence the growth, health, and emigration timing of juvenile river herring. However, these relationships are not yet fully understood.
+This research aims to clarify the relationship between juvenile river herring and zooplankton through targeted sampling of three freshwater coves along the Connecticut River. The coves were stratified along the southern portion of the Connecticut river, with Hamburg Cove closest to the mouth, Chapman Pond in the middle, and Wethersfield Cove the furthest upstream. Once per month (June-September of 2019), a combination of juvenile river herring, zooplankton samples, and environmental data were collected. This website provides information on data cleaning, database building, and data analysis. Please <a href="mailto:slocombemg@gmail.com">email</a> Meghan-Grace Slocombe with any questions.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:image1"></span>
+<img src="Fiish.png" alt="Juvenile river herring" width="100%" />
+<p class="caption">
+Figure 1.1: Juvenile river herring
+</p>
 </div>
-<div id="render-book" class="section level2 hasAnchor" number="1.2">
-<h2><span class="header-section-number">1.2</span> Render book<a href="index.html#render-book" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>You can render the HTML version of this example book without changing anything:</p>
-<ol style="list-style-type: decimal">
-<li><p>Find the <strong>Build</strong> pane in the RStudio IDE, and</p></li>
-<li><p>Click on <strong>Build Book</strong>, then select your output format, or select “All formats” if you’d like to use multiple formats from the same book source files.</p></li>
-</ol>
-<p>Or build the book from the R console:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" aria-hidden="true" tabindex="-1"></a>bookdown<span class="sc">::</span><span class="fu">render_book</span>()</span></code></pre></div>
-<p>To render this example to PDF as a <code>bookdown::pdf_book</code>, you’ll need to install XeLaTeX. You are recommended to install TinyTeX (which includes XeLaTeX): <a href="https://yihui.org/tinytex/" class="uri">https://yihui.org/tinytex/</a>.</p>
+<div id="institution" class="section level2 hasAnchor" number="1.1">
+<h2><span class="header-section-number">1.1</span> Institution<a href="index.html#institution" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>This research was conducted at the University of Massachusetts Amherst to fulfill the honors thesis requirement.</p>
 </div>
-<div id="preview-book" class="section level2 hasAnchor" number="1.3">
-<h2><span class="header-section-number">1.3</span> Preview book<a href="index.html#preview-book" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>As you work, you may start a local server to live preview this HTML book. This preview will update as you edit the book when you save individual .Rmd files. You can start the server in a work session by using the RStudio add-in “Preview book”, or from the R console:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="index.html#cb2-1" aria-hidden="true" tabindex="-1"></a>bookdown<span class="sc">::</span><span class="fu">serve_book</span>()</span></code></pre></div>
+<div id="study-sites" class="section level2 hasAnchor" number="1.2">
+<h2><span class="header-section-number">1.2</span> Study Sites<a href="index.html#study-sites" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The study sites were Hamburg Cove, Chapman Pond, and Wethersfield Cove (Figure 1.2).</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:image2"></span>
+<img src="Map.PNG" alt="Map of sampled coves along the Connecticut River, oriented with North at the top" width="70%" />
+<p class="caption">
+Figure 1.2: Map of sampled coves along the Connecticut River, oriented with North at the top
+</p>
+</div>
 
 </div>
 </div>
@@ -259,7 +254,7 @@ div.csl-indent {
         </div>
       </div>
 
-<a href="hello-bookdown.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="database-creation.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
