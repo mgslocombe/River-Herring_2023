@@ -136,7 +136,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">River Herring Research</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Juvenile river herring</a>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> url: your book url like https://bookdown.org/yihui/bookdown</a>
 <ul>
 <li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#institution"><i class="fa fa-check"></i><b>1.1</b> Institution</a></li>
 <li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#study-sites"><i class="fa fa-check"></i><b>1.2</b> Study Sites</a></li>
@@ -184,7 +184,7 @@ Figure 2.1: Schematic of database design
 <p>To recreate this database, simply execute the code below. Note, each table is referred to by the title provided to each box in the above figure.</p>
 <div id="load-required-package-and-initate-database-building" class="section level2 hasAnchor" number="2.1">
 <h2><span class="header-section-number">2.1</span> Load required package and initate database building<a href="database-creation.html#load-required-package-and-initate-database-building" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Load the DBI package into R and create a connection between R and SQLite by creating the database file.</p>
+<p>Load the DBI package into R and initiate a connection between R and SQLite by creating the database file.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="database-creation.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
 <span id="cb1-2"><a href="database-creation.html#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="database-creation.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Create Database ----</span></span>
@@ -221,7 +221,7 @@ Figure 2.1: Schematic of database design
 </div>
 <div id="create-envir-table" class="section level2 hasAnchor" number="2.3">
 <h2><span class="header-section-number">2.3</span> Create <strong>ENVIR</strong> table<a href="database-creation.html#create-envir-table" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The envir table includes the following data: covemonth (<em>primary key</em>), month, cove, average conductivity (avg_cond), average temperature in Celsius (avg_temp), average percent dissolved oxygen (avg_DOperc), and average milligrams of dissolved oxygen per liter of water (avg_DOmgl). These are averages of measurements taken over a range of water depths.</p>
+<p>The envir table includes the following data: covemonth (<em>primary key</em>), month, cove, average conductivity (avg_cond), average temperature in celsius (avg_temp), average percent dissolved oxygen (avg_DOperc), and average milligrams of dissolved oxygen per liter of water (avg_DOmgl). These are averages of measurements taken over a range of water depths.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="database-creation.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">##Create envir table in sql</span></span>
 <span id="cb3-2"><a href="database-creation.html#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(rh_db, <span class="st">&quot;CREATE TABLE envir (</span></span>
 <span id="cb3-3"><a href="database-creation.html#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="st">cove varchar(12) CHECK (cove IN (&#39;chapman&#39;, &#39;wethersfield&#39;, &#39;hamburg&#39;)),</span></span>
@@ -357,7 +357,7 @@ Figure 2.1: Schematic of database design
 </div>
 <div id="create-zp_size-table" class="section level2 hasAnchor" number="2.7">
 <h2><span class="header-section-number">2.7</span> Create <strong>ZP_SIZE</strong> table<a href="database-creation.html#create-zp_size-table" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The zp_size table includes the following data: zpsize_id (<em>primary key</em>), cove, month, covemonth(<strong>foreign key</strong>), sampling site (approximately three unique sites were sampled at each cove, each month), zooplankton genus, zooplankton order, the number of individual zooplankton per cubic meter of water, and the total length (micrometers) of the first twenty individuals of that zooplankton identified at each site at each covemonth combination.</p>
+<p>The zp_size table includes the following data: zpsize_id (<em>primary key</em>), cove, month, covemonth(<strong>foreign key</strong>), sampling site (approximately three unique sites were sampled at each cove, each month), lowest possible taxonomic classification of zooplankton (zp_type), zooplankton order,and the total length (micrometers) of the first twenty individuals of that zooplankton identified at each site at each covemonth combination.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="database-creation.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">##Create zp_size table in sql</span></span>
 <span id="cb7-2"><a href="database-creation.html#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(rh_db, <span class="st">&quot;CREATE TABLE zp_size (</span></span>
 <span id="cb7-3"><a href="database-creation.html#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="st">zpsize_id char(8) PRIMARY KEY NOT NULL,</span></span>

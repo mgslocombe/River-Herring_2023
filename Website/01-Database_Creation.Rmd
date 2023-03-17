@@ -10,7 +10,7 @@ To recreate this database, simply execute the code below. Note, each table is re
 
 ## Load required package and initate database building
 
-Load the DBI package into R and create a connection between R and SQLite by creating the database file.
+Load the DBI package into R and initiate a connection between R and SQLite by creating the database file.
 
 ```{r, warning=FALSE, eval=FALSE}
 library(DBI)
@@ -56,7 +56,7 @@ dbGetQuery(rh_db, "SELECT * FROM fish LIMIT 3;")
 
 ## Create **ENVIR** table
 
-The envir table includes the following data: covemonth (*primary key*), month, cove, average conductivity (avg_cond), average temperature in Celsius (avg_temp), average percent dissolved oxygen (avg_DOperc), and average milligrams of dissolved oxygen per liter of water (avg_DOmgl). These are averages of measurements taken over a range of water depths.
+The envir table includes the following data: covemonth (*primary key*), month, cove, average conductivity (avg_cond), average temperature in celsius (avg_temp), average percent dissolved oxygen (avg_DOperc), and average milligrams of dissolved oxygen per liter of water (avg_DOmgl). These are averages of measurements taken over a range of water depths.
 
 ```{r,eval=FALSE}
 
@@ -212,7 +212,7 @@ dbGetQuery(rh_db, "SELECT * FROM zp_biomass LIMIT 3;")
 
 ## Create **ZP_SIZE** table
 
-The zp_size table includes the following data: zpsize_id (*primary key*), cove, month, covemonth(**foreign key**), sampling site (approximately three unique sites were sampled at each cove, each month), zooplankton genus, zooplankton order, the number of individual zooplankton per cubic meter of water, and the total length (micrometers) of the first twenty individuals  of that zooplankton identified at each site at each covemonth combination.
+The zp_size table includes the following data: zpsize_id (*primary key*), cove, month, covemonth(**foreign key**), sampling site (approximately three unique sites were sampled at each cove, each month), lowest possible taxonomic classification of zooplankton (zp_type), zooplankton order,and the total length (micrometers) of the first twenty individuals  of that zooplankton identified at each site at each covemonth combination.
 
 ```{r,eval=FALSE}
 
