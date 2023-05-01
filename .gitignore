@@ -6,3 +6,5 @@ Outputs/
 Presentations/
 *.Rhistory
 .Rproj.user
+!docs/**
+!docs/**/*.png

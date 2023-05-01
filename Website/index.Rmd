@@ -1,6 +1,10 @@
 --- 
 title: "Juvenile River Herring: Diet, habitat, and food resources from the Connecticut River"
 author: "Meghan Slocombe"
+output: 
+  html_document:
+    theme:
+      bootswatch: morph
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 documentclass: book
@@ -21,6 +25,7 @@ River herring (alewife *Alosa pseudoharengus* and blueback herring *A. aestivali
   
 ```{r image1, fig.cap="Juvenile river herring", fig.align='center', out.width='100%', echo=FALSE}
 knitr::include_graphics("Fiish.png")
+getwd()
 ```
 
 ## Institution 

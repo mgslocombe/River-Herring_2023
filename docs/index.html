@@ -23,7 +23,7 @@
 <meta name="author" content="Meghan Slocombe" />
 
 
-<meta name="date" content="2023-03-17" />
+<meta name="date" content="2023-05-01" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -151,6 +151,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.6" data-path="database-creation.html"><a href="database-creation.html#create-zp_biomass-table"><i class="fa fa-check"></i><b>2.6</b> Create <strong>ZP_BIOMASS</strong> table</a></li>
 <li class="chapter" data-level="2.7" data-path="database-creation.html"><a href="database-creation.html#create-zp_size-table"><i class="fa fa-check"></i><b>2.7</b> Create <strong>ZP_SIZE</strong> table</a></li>
 </ul></li>
+<li class="chapter" data-level="3" data-path="data-cleaning.html"><a href="data-cleaning.html"><i class="fa fa-check"></i><b>3</b> Data Cleaning</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="data-cleaning.html"><a href="data-cleaning.html#load-data"><i class="fa fa-check"></i><b>3.1</b> Load data</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="data-cleaning.html"><a href="data-cleaning.html#load-the-river-herring-database-and-all-the-tables-it-contains"><i class="fa fa-check"></i><b>3.1.1</b> Load the river herring database and all the tables it contains</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="data-cleaning.html"><a href="data-cleaning.html#data-prep-fish-and-prey-size"><i class="fa fa-check"></i><b>3.2</b> Data prep, fish and prey size</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="data-cleaning.html"><a href="data-cleaning.html#the-steps-for-the-data-preparation-are-as-follows"><i class="fa fa-check"></i><b>3.2.1</b> The steps for the data preparation are as follows:</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="data-cleaning.html"><a href="data-cleaning.html#data-prep-prey-selectivity"><i class="fa fa-check"></i><b>3.3</b> Data prep, prey selectivity</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="data-cleaning.html"><a href="data-cleaning.html#the-steps-for-the-zooplankton-data-preparation-are-as-follows"><i class="fa fa-check"></i><b>3.3.1</b> The steps for the zooplankton data preparation are as follows:</a></li>
+<li class="chapter" data-level="3.3.2" data-path="data-cleaning.html"><a href="data-cleaning.html#the-steps-for-the-prey-data-preparation-are-as-follows"><i class="fa fa-check"></i><b>3.3.2</b> The steps for the prey data preparation are as follows:</a></li>
+<li class="chapter" data-level="3.3.3" data-path="data-cleaning.html"><a href="data-cleaning.html#the-steps-for-combining-the-data-sets-are-as-follows"><i class="fa fa-check"></i><b>3.3.3</b> The steps for combining the data sets are as follows:</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -175,7 +192,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">Juvenile River Herring: Diet, habitat, and food resources from the Connecticut River</h1>
 <p class="author"><em>Meghan Slocombe</em></p>
-<p class="date"><em>2023-03-17</em></p>
+<p class="date"><em>2023-05-01</em></p>
 </div>
 <div id="juvenile-river-herring" class="section level1 hasAnchor" number="1">
 <h1><span class="header-section-number">Chapter 1</span> Juvenile river herring<a href="index.html#juvenile-river-herring" class="anchor-section" aria-label="Anchor link to header"></a></h1>
@@ -187,6 +204,7 @@ This research aims to clarify the relationship between juvenile river herring an
 Figure 1.1: Juvenile river herring
 </p>
 </div>
+<pre><code>## [1] &quot;C:/Users/Meghan/OneDrive/Documents/River-Herring_2023/Website&quot;</code></pre>
 <div id="institution" class="section level2 hasAnchor" number="1.1">
 <h2><span class="header-section-number">1.1</span> Institution<a href="index.html#institution" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>This research was conducted at the University of Massachusetts Amherst in fulfillment of Meghan-Grace Slocombe’s honors thesis requirement.</p>

@@ -1,0 +1,164 @@
+
+`r if (knitr::is_html_output()) '
+# Data Cleaning
+'`
+## Load data
+
+### Load the river herring database and all the tables it contains
+
+```{r, warning=FALSE, eval=FALSE}
+library(tidyverse)
+library(DBI)
+
+#Load database
+rh_db <- dbConnect(RSQLite::SQLite(),
+                        "../DataClean/rh.db")
+
+#Load tables
+fish <- dbGetQuery(rh_db, "SELECT * FROM fish;")
+envir <- dbGetQuery(rh_db, "SELECT * FROM envir;")
+diet <- dbGetQuery(rh_db, "SELECT * FROM diet;")
+diet_size <- dbGetQuery(rh_db, "SELECT * FROM diet_size;")
+zp_biomass <- dbGetQuery(rh_db, "SELECT * FROM zp_biomass;")
+zp_size <- dbGetQuery(rh_db, "SELECT * FROM zp_size;")
+```
+
+## Data prep, fish and prey size
+
+### The steps for the data preparation are as follows:
+  
+1. Join the fish and diet size data
+  
+2. Calculate the average prey length for each prey type in each fish
+  
+3. Calculate the estimated total length for prey items that were not measured (were not within the first 20 of that prey type) for each prey type in each fish 
+ 
+4. Calculate the total prey length for each prey type in each fish
+ 
+5. Calculate the total prey length for all prey types in each fish
+ 
+6. Calculate the total number of prey within each fish
+ 
+7. Calculate the average prey length
+
+```{r, warning=FALSE, eval=FALSE}
+#Prep fish and prey size data
+avgfishpreylengthstep1 <- diet_size %>%
+  left_join(fish, by = "fish_id") %>% #Step 1
+  mutate(rowavg = rowMeans(subset(diet_size, select = c(6:25)), 
+                           na.rm = TRUE)) %>% #Step 2 
+  mutate(over20bm = if_else(prey_tot>20, (prey_tot-20)*(rowavg), 0)) #Step 3
+
+avgfishpreylength <- avgfishpreylengthstep1 %>%
+  mutate(preylengthsum = rowSums(subset(avgfishpreylengthstep1, #Step 4
+                                        select = c(6:25,32)), na.rm = TRUE)) %>% 
+  group_by(fish_id) %>% 
+  mutate(fishpreylength = sum(preylengthsum)) %>% #Step 5
+  mutate(fishpreytot = sum(prey_tot)) %>% #Step 6
+  mutate(fishavgpreylength = fishpreylength/fishpreytot) #Step 7
+
+```
+
+## Data prep, prey selectivity
+
+### The steps for the zooplankton data preparation are as follows:
+
+1. Calculate total number of sites sampled in cove for that month
+  
+2. Calculate the average number of individuals per zooplankton category across sampling sites for each cove month combo
+  
+3. Calculate the total number of individuals for each zooplankton category sampled at each cove month combo
+  
+4. Calculate the total number of individuals sampled at each cove month combo
+  
+5. Calculate the percent of the total number of indiviuals that each zooplankton category is for each cove month combo
+  
+6. Simplify data set to needed columns and rows
+  
+7. Add a column stating that this is water column data
+  
+8. Rename zp_order to category
+
+```{r, warning=FALSE, eval=FALSE}
+#Prep the water column data
+zpwc <- zp_biomass %>%
+  group_by(covemonth) %>%
+  mutate(sites_tot = length(unique(site))) %>%
+  ungroup() %>% #Step 1
+  group_by(covemonth, zp_genus) %>%
+  mutate(cmavgindiv = sum(zp_indiv_per_m3)/sites_tot) %>% 
+  select(-c(zp_id, site, zp_indiv_per_m3, zp_microg_per_m3)) %>%
+  distinct() %>%
+  ungroup() %>% #Step 2
+  group_by(covemonth, zp_order) %>%
+  mutate(cattot = sum(cmavgindiv)) %>%
+  ungroup() %>% #Step 3
+  group_by(covemonth) %>%
+  mutate(covmonthtot = sum(cmavgindiv)) %>%
+  ungroup %>% #Step 4
+  mutate(perctot = cattot/covmonthtot) %>% #Step 5
+  select(1:4, 11) %>%
+  distinct() %>% #Step 6
+  mutate(gutwater = "water column") %>% #Step 7
+  rename(category = zp_order) #Step 8
+```
+
+### The steps for the prey data preparation are as follows:
+  
+1. Join fish data to diet data
+  
+2. Calculate the total number of prey individuals for each prey category sampled at each cove month combo
+  
+3. Calculate the total number of prey individuals sampled at each cove month combo
+  
+4. Calculate the percent of the total number of prey that each zooplankton category is for each cove month combo
+  
+5. Simplify data set to needed columns and rows
+  
+6. Add a column stating that this is gut content data
+  
+7. Reorder the columns to desired structure
+  
+8. Rename prey_cat to category
+
+```{r, warning=FALSE, eval=FALSE}
+#Prep the gut content data
+zpgc <- diet %>%
+  left_join(fish, by = "fish_id") %>% #Step 1
+  group_by(covemonth, prey_cat) %>%
+  mutate(cattot = sum(total)) %>%
+  ungroup() %>% #Step 2
+  group_by(covemonth) %>%
+  mutate(covmonthtot = sum(total)) %>%
+  ungroup() %>% #Step 3
+  mutate(perctot = cattot/covmonthtot) %>% #Step 4
+  select(4, 7:9, 14) %>%
+  distinct() %>% #Step 5
+  mutate(gutwater = "gut") %>% #Step 6
+  relocate(prey_cat, .after = covemonth) %>% #Step 7
+  rename(category = prey_cat) #Step 8
+
+```
+
+### The steps for combining the data sets are as follows:
+
+1. Bind the two datasets
+  
+2. Filter the dataset to only include the top four categories--- Cladocera, Ostracoda, Copepoda, Ploima
+  
+3. Factor the month levels
+  
+4. Factor the cove levels
+
+```{r, warning=FALSE, eval=FALSE}
+#Create data set with water column and gut content data
+zpwcgc <- rbind(zpwc, zpgc) %>%
+  filter(category == "Cladocera" | 
+           category == "Ostracoda" | 
+           category == "Copepoda" | 
+           category == "Ploima")
+
+zpwcgc$month <- factor(zpwcgc$month, levels = c("June", "July", "August", "September"))
+zpwcgc$cove <- factor(zpwcgc$cove, levels = c("wethersfield", "chapman", "hamburg"))
+
+```

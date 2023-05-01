@@ -131,6 +131,7 @@ The diet_size table includes the following data: dietsize_id (*primary key*), fi
 dbExecute(rh_db, "CREATE TABLE diet_size (
 dietsize_id char(11) PRIMARY KEY NOT NULL,
 fish_id char(5),
+prey_tot double,
 prey_type varchar(20),
 prey_cat varchar(20),
 TL1 double,
@@ -177,7 +178,7 @@ The zp_biomass table includes the following data: zp_id (*primary key*), cove, m
 
 ```{r,eval=FALSE}
 
-##Create diet table in sql
+##Create zp_biomass table in sql
 dbExecute(rh_db, "CREATE TABLE zp_biomass (
 zp_id char(5) PRIMARY KEY NOT NULL,
 cove varchar(12) CHECK (cove IN ('chapman', 'wethersfield', 'hamburg')),

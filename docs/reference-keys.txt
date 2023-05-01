@@ -12,4 +12,12 @@ create-diet-table
 create-diet_size-table
 create-zp_biomass-table
 create-zp_size-table
-url-your-book-url-like-httpsbookdown.orgyihuibookdown
+data-cleaning
+load-data
+load-the-river-herring-database-and-all-the-tables-it-contains
+data-prep-fish-and-prey-size
+the-steps-for-the-data-preparation-are-as-follows
+data-prep-prey-selectivity
+the-steps-for-the-zooplankton-data-preparation-are-as-follows
+the-steps-for-the-prey-data-preparation-are-as-follows
+the-steps-for-combining-the-data-sets-are-as-follows
