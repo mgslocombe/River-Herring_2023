@@ -165,7 +165,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="3.3.1" data-path="data-cleaning.html"><a href="data-cleaning.html#the-steps-for-the-zooplankton-data-preparation-are-as-follows"><i class="fa fa-check"></i><b>3.3.1</b> The steps for the zooplankton data preparation are as follows:</a></li>
 <li class="chapter" data-level="3.3.2" data-path="data-cleaning.html"><a href="data-cleaning.html#the-steps-for-the-prey-data-preparation-are-as-follows"><i class="fa fa-check"></i><b>3.3.2</b> The steps for the prey data preparation are as follows:</a></li>
-<li class="chapter" data-level="3.3.3" data-path="data-cleaning.html"><a href="data-cleaning.html#the-steps-for-combining-the-data-sets-are-as-follows"><i class="fa fa-check"></i><b>3.3.3</b> The steps for combining the data sets are as follows:</a></li>
+<li class="chapter" data-level="3.3.3" data-path="data-cleaning.html"><a href="data-cleaning.html#the-steps-for-combining-the-data-sets-and-calculating-selectivity-are-as-follows"><i class="fa fa-check"></i><b>3.3.3</b> The steps for combining the data sets and calculating selectivity are as follows:</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="data-visualizations.html"><a href="data-visualizations.html"><i class="fa fa-check"></i><b>4</b> Data Visualizations</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="data-visualizations.html"><a href="data-visualizations.html#scatterplots-fish-and-prey"><i class="fa fa-check"></i><b>4.1</b> Scatterplots, fish and prey</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="data-visualizations.html"><a href="data-visualizations.html#use-ggplot-to-create-a-scatterplot-of-average-prey-length-by-fish-length"><i class="fa fa-check"></i><b>4.1.1</b> Use ggplot to create a scatterplot of average prey length by fish length</a></li>
+<li class="chapter" data-level="4.1.2" data-path="data-visualizations.html"><a href="data-visualizations.html#use-ggplot-to-create-a-scatterplot-of-average-prey-length-by-fish-age"><i class="fa fa-check"></i><b>4.1.2</b> Use ggplot to create a scatterplot of average prey length by fish age</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="data-visualizations.html"><a href="data-visualizations.html#selectivity-plot"><i class="fa fa-check"></i><b>4.2</b> Selectivity plot</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="data-visualizations.html"><a href="data-visualizations.html#use-ggplot-to-create-a-graph-of-selectivity-of-different-prey-categories-across-months-and-sites"><i class="fa fa-check"></i><b>4.2.1</b> Use ggplot to create a graph of selectivity of different prey categories across months and sites</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -202,149 +214,183 @@ Figure 2.1: Schematic of database design
 <div id="load-required-package-and-initate-database-building" class="section level2 hasAnchor" number="2.1">
 <h2><span class="header-section-number">2.1</span> Load required package and initate database building<a href="database-creation.html#load-required-package-and-initate-database-building" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Load the DBI package into R and initiate a connection between R and SQLite by creating the database file.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="database-creation.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
-<span id="cb2-2"><a href="database-creation.html#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="database-creation.html#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Create Database ----</span></span>
-<span id="cb2-4"><a href="database-creation.html#cb2-4" aria-hidden="true" tabindex="-1"></a>rh_db <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), <span class="st">&quot;../DataClean/rh.db&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="database-creation.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
+<span id="cb1-2"><a href="database-creation.html#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="database-creation.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Create Database ----</span></span>
+<span id="cb1-4"><a href="database-creation.html#cb1-4" aria-hidden="true" tabindex="-1"></a>rh_db <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(), <span class="st">&quot;../DataClean/rh.db&quot;</span>)</span></code></pre></div>
 </div>
 <div id="create-fish-table" class="section level2 hasAnchor" number="2.2">
 <h2><span class="header-section-number">2.2</span> Create <strong>FISH</strong> table<a href="database-creation.html#create-fish-table" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The fish table includes the following data: fish_id (<em>primary key</em>), month captured, cove captured at, covemonth combination (<strong>foreign key</strong>), fish age in days, and TL in mm.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="database-creation.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">##Create fish table in sql</span></span>
-<span id="cb3-2"><a href="database-creation.html#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(rh_db, <span class="st">&quot;CREATE TABLE fish (</span></span>
-<span id="cb3-3"><a href="database-creation.html#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="st">fish_id char(5) NOT NULL,</span></span>
-<span id="cb3-4"><a href="database-creation.html#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="st">cove varchar(12) CHECK (cove IN (&#39;chapman&#39;, &#39;wethersfield&#39;, &#39;hamburg&#39;)),</span></span>
-<span id="cb3-5"><a href="database-creation.html#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="st">month varchar(10) CHECK (month IN (&#39;July&#39;, &#39;August&#39;, &#39;September&#39;)),</span></span>
-<span id="cb3-6"><a href="database-creation.html#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="st">covemonth varchar(22) CHECK (covemonth IN (&#39;hamburgAugust&#39;, &#39;hamburgJuly&#39;, </span></span>
-<span id="cb3-7"><a href="database-creation.html#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="st">  &#39;wethersfieldJuly&#39;, &#39;wethersfieldAugust&#39;, &#39;wethersfieldSeptember&#39;, &#39;chapmanJuly&#39;, </span></span>
-<span id="cb3-8"><a href="database-creation.html#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="st">  &#39;chapmanAugust&#39;, &#39;chapmanSeptember&#39;)),</span></span>
-<span id="cb3-9"><a href="database-creation.html#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="st">age_days integer(2),</span></span>
-<span id="cb3-10"><a href="database-creation.html#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="st">TL_mm integer(2),</span></span>
-<span id="cb3-11"><a href="database-creation.html#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="st">PRIMARY KEY (fish_id)</span></span>
-<span id="cb3-12"><a href="database-creation.html#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="st">);&quot;</span>)</span>
-<span id="cb3-13"><a href="database-creation.html#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-14"><a href="database-creation.html#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="do">##Load fish csv into R</span></span>
-<span id="cb3-15"><a href="database-creation.html#cb3-15" aria-hidden="true" tabindex="-1"></a>fish <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;../DataClean/Fish.csv&quot;</span>,</span>
-<span id="cb3-16"><a href="database-creation.html#cb3-16" aria-hidden="true" tabindex="-1"></a>                 <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb3-17"><a href="database-creation.html#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-18"><a href="database-creation.html#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="do">##Check that names align</span></span>
-<span id="cb3-19"><a href="database-creation.html#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(fish)</span>
-<span id="cb3-20"><a href="database-creation.html#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-21"><a href="database-creation.html#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="do">##Write loaded csv into sql table</span></span>
-<span id="cb3-22"><a href="database-creation.html#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="fu">dbWriteTable</span>(rh_db, <span class="st">&quot;fish&quot;</span>, fish, <span class="at">append =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb3-23"><a href="database-creation.html#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-24"><a href="database-creation.html#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="do">##Check that data loaded properly</span></span>
-<span id="cb3-25"><a href="database-creation.html#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="fu">dbGetQuery</span>(rh_db, <span class="st">&quot;SELECT * FROM fish LIMIT 3;&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="database-creation.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">##Create fish table in sql</span></span>
+<span id="cb2-2"><a href="database-creation.html#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(rh_db, <span class="st">&quot;CREATE TABLE fish (</span></span>
+<span id="cb2-3"><a href="database-creation.html#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="st">fish_id char(5) NOT NULL,</span></span>
+<span id="cb2-4"><a href="database-creation.html#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="st">cove varchar(12) CHECK (cove IN (&#39;chapman&#39;, &#39;wethersfield&#39;, &#39;hamburg&#39;)),</span></span>
+<span id="cb2-5"><a href="database-creation.html#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="st">month varchar(10) CHECK (month IN (&#39;July&#39;, &#39;August&#39;, &#39;September&#39;)),</span></span>
+<span id="cb2-6"><a href="database-creation.html#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="st">covemonth varchar(22) CHECK (covemonth IN (&#39;hamburgAugust&#39;, &#39;hamburgJuly&#39;, </span></span>
+<span id="cb2-7"><a href="database-creation.html#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="st">  &#39;wethersfieldJuly&#39;, &#39;wethersfieldAugust&#39;, &#39;wethersfieldSeptember&#39;, &#39;chapmanJuly&#39;, </span></span>
+<span id="cb2-8"><a href="database-creation.html#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="st">  &#39;chapmanAugust&#39;, &#39;chapmanSeptember&#39;)),</span></span>
+<span id="cb2-9"><a href="database-creation.html#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="st">age_days integer(2),</span></span>
+<span id="cb2-10"><a href="database-creation.html#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="st">TL_mm integer(2),</span></span>
+<span id="cb2-11"><a href="database-creation.html#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="st">PRIMARY KEY (fish_id)</span></span>
+<span id="cb2-12"><a href="database-creation.html#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="st">);&quot;</span>)</span>
+<span id="cb2-13"><a href="database-creation.html#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="database-creation.html#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="do">##Load fish csv into R</span></span>
+<span id="cb2-15"><a href="database-creation.html#cb2-15" aria-hidden="true" tabindex="-1"></a>fish <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;../DataClean/Fish.csv&quot;</span>,</span>
+<span id="cb2-16"><a href="database-creation.html#cb2-16" aria-hidden="true" tabindex="-1"></a>                 <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-17"><a href="database-creation.html#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="database-creation.html#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="do">##Check that names align</span></span>
+<span id="cb2-19"><a href="database-creation.html#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(fish)</span>
+<span id="cb2-20"><a href="database-creation.html#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="database-creation.html#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="do">##Write loaded csv into sql table</span></span>
+<span id="cb2-22"><a href="database-creation.html#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="fu">dbWriteTable</span>(rh_db, <span class="st">&quot;fish&quot;</span>, fish, <span class="at">append =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-23"><a href="database-creation.html#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="database-creation.html#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="do">##Check that data loaded properly</span></span>
+<span id="cb2-25"><a href="database-creation.html#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="fu">dbGetQuery</span>(rh_db, <span class="st">&quot;SELECT * FROM fish LIMIT 3;&quot;</span>)</span></code></pre></div>
 </div>
 <div id="create-envir-table" class="section level2 hasAnchor" number="2.3">
 <h2><span class="header-section-number">2.3</span> Create <strong>ENVIR</strong> table<a href="database-creation.html#create-envir-table" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The envir table includes the following data: covemonth (<em>primary key</em>), month, cove, average conductivity (avg_cond), average temperature in celsius (avg_temp), average percent dissolved oxygen (avg_DOperc), and average milligrams of dissolved oxygen per liter of water (avg_DOmgl). These are averages of measurements taken over a range of water depths.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="database-creation.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">##Create envir table in sql</span></span>
-<span id="cb4-2"><a href="database-creation.html#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(rh_db, <span class="st">&quot;CREATE TABLE envir (</span></span>
-<span id="cb4-3"><a href="database-creation.html#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="st">cove varchar(12) CHECK (cove IN (&#39;chapman&#39;, &#39;wethersfield&#39;, &#39;hamburg&#39;)),</span></span>
-<span id="cb4-4"><a href="database-creation.html#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="st">month varchar(10) CHECK (month IN (&#39;June&#39;, &#39;July&#39;, &#39;August&#39;, &#39;September&#39;)),</span></span>
-<span id="cb4-5"><a href="database-creation.html#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="st">covemonth varchar(22) NOT NULL PRIMARY KEY CHECK (covemonth IN (&#39;hamburgAugust&#39;, &#39;hamburgJuly&#39;, </span></span>
-<span id="cb4-6"><a href="database-creation.html#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="st">  &#39;hamburgJune&#39;, &#39;hamburgSeptember&#39;, &#39;wethersfieldJune&#39;,  &#39;wethersfieldJuly&#39;, </span></span>
-<span id="cb4-7"><a href="database-creation.html#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="st">  &#39;wethersfieldAugust&#39;, &#39;wethersfieldSeptember&#39;, &#39;chapmanJune&#39;, &#39;chapmanJuly&#39;, </span></span>
-<span id="cb4-8"><a href="database-creation.html#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="st">  &#39;chapmanAugust&#39;, &#39;chapmanSeptember&#39;)),</span></span>
-<span id="cb4-9"><a href="database-creation.html#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="st">avg_cond real,</span></span>
-<span id="cb4-10"><a href="database-creation.html#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="st">avg_temp real,</span></span>
-<span id="cb4-11"><a href="database-creation.html#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="st">avg_DOperc real,</span></span>
-<span id="cb4-12"><a href="database-creation.html#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="st">avg_DOmgl real</span></span>
-<span id="cb4-13"><a href="database-creation.html#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="st">);&quot;</span>)</span>
-<span id="cb4-14"><a href="database-creation.html#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-15"><a href="database-creation.html#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="do">##Load fish csv into R</span></span>
-<span id="cb4-16"><a href="database-creation.html#cb4-16" aria-hidden="true" tabindex="-1"></a>envir <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;../DataClean/Envir.csv&quot;</span>,</span>
-<span id="cb4-17"><a href="database-creation.html#cb4-17" aria-hidden="true" tabindex="-1"></a>                 <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb4-18"><a href="database-creation.html#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-19"><a href="database-creation.html#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="do">##Check that names align</span></span>
-<span id="cb4-20"><a href="database-creation.html#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(envir)</span>
-<span id="cb4-21"><a href="database-creation.html#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-22"><a href="database-creation.html#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="do">##Write loaded csv into sql table</span></span>
-<span id="cb4-23"><a href="database-creation.html#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="fu">dbWriteTable</span>(rh_db, <span class="st">&quot;envir&quot;</span>, envir, <span class="at">append =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb4-24"><a href="database-creation.html#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-25"><a href="database-creation.html#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="do">##Check that data loaded properly</span></span>
-<span id="cb4-26"><a href="database-creation.html#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="fu">dbGetQuery</span>(rh_db, <span class="st">&quot;SELECT * FROM envir LIMIT 3;&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="database-creation.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">##Create envir table in sql</span></span>
+<span id="cb3-2"><a href="database-creation.html#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(rh_db, <span class="st">&quot;CREATE TABLE envir (</span></span>
+<span id="cb3-3"><a href="database-creation.html#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="st">cove varchar(12) CHECK (cove IN (&#39;chapman&#39;, &#39;wethersfield&#39;, &#39;hamburg&#39;)),</span></span>
+<span id="cb3-4"><a href="database-creation.html#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="st">month varchar(10) CHECK (month IN (&#39;June&#39;, &#39;July&#39;, &#39;August&#39;, &#39;September&#39;)),</span></span>
+<span id="cb3-5"><a href="database-creation.html#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="st">covemonth varchar(22) NOT NULL PRIMARY KEY CHECK (covemonth IN (&#39;hamburgAugust&#39;, &#39;hamburgJuly&#39;, </span></span>
+<span id="cb3-6"><a href="database-creation.html#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="st">  &#39;hamburgJune&#39;, &#39;hamburgSeptember&#39;, &#39;wethersfieldJune&#39;,  &#39;wethersfieldJuly&#39;, </span></span>
+<span id="cb3-7"><a href="database-creation.html#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="st">  &#39;wethersfieldAugust&#39;, &#39;wethersfieldSeptember&#39;, &#39;chapmanJune&#39;, &#39;chapmanJuly&#39;, </span></span>
+<span id="cb3-8"><a href="database-creation.html#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="st">  &#39;chapmanAugust&#39;, &#39;chapmanSeptember&#39;)),</span></span>
+<span id="cb3-9"><a href="database-creation.html#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="st">avg_cond real,</span></span>
+<span id="cb3-10"><a href="database-creation.html#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="st">avg_temp real,</span></span>
+<span id="cb3-11"><a href="database-creation.html#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="st">avg_DOperc real,</span></span>
+<span id="cb3-12"><a href="database-creation.html#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="st">avg_DOmgl real</span></span>
+<span id="cb3-13"><a href="database-creation.html#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="st">);&quot;</span>)</span>
+<span id="cb3-14"><a href="database-creation.html#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="database-creation.html#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="do">##Load fish csv into R</span></span>
+<span id="cb3-16"><a href="database-creation.html#cb3-16" aria-hidden="true" tabindex="-1"></a>envir <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;../DataClean/Envir.csv&quot;</span>,</span>
+<span id="cb3-17"><a href="database-creation.html#cb3-17" aria-hidden="true" tabindex="-1"></a>                 <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb3-18"><a href="database-creation.html#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="database-creation.html#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="do">##Check that names align</span></span>
+<span id="cb3-20"><a href="database-creation.html#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(envir)</span>
+<span id="cb3-21"><a href="database-creation.html#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="database-creation.html#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="do">##Write loaded csv into sql table</span></span>
+<span id="cb3-23"><a href="database-creation.html#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="fu">dbWriteTable</span>(rh_db, <span class="st">&quot;envir&quot;</span>, envir, <span class="at">append =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-24"><a href="database-creation.html#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="database-creation.html#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="do">##Check that data loaded properly</span></span>
+<span id="cb3-26"><a href="database-creation.html#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="fu">dbGetQuery</span>(rh_db, <span class="st">&quot;SELECT * FROM envir LIMIT 3;&quot;</span>)</span></code></pre></div>
 </div>
 <div id="create-diet-table" class="section level2 hasAnchor" number="2.4">
 <h2><span class="header-section-number">2.4</span> Create <strong>DIET</strong> table<a href="database-creation.html#create-diet-table" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The diet table includes the following data: diet_id (<em>primary key</em>), fish_id (<strong>foreign key</strong>), lowest possible taxonomic classification of prey (prey_type), prey Order (prey_cat), total number of that type of prey found in the fish, and total biomass (micrograms) of that type of prey found in the fish.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="database-creation.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">##Create diet table in sql</span></span>
-<span id="cb5-2"><a href="database-creation.html#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(rh_db, <span class="st">&quot;CREATE TABLE diet (</span></span>
-<span id="cb5-3"><a href="database-creation.html#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="st">diet_id char(7) PRIMARY KEY NOT NULL,</span></span>
-<span id="cb5-4"><a href="database-creation.html#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="st">fish_id char(5),</span></span>
-<span id="cb5-5"><a href="database-creation.html#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="st">prey_type varchar(20),</span></span>
-<span id="cb5-6"><a href="database-creation.html#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="st">prey_cat varchar(20),</span></span>
-<span id="cb5-7"><a href="database-creation.html#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="st">total integer(3),</span></span>
-<span id="cb5-8"><a href="database-creation.html#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="st">preybiomass_microg double,</span></span>
-<span id="cb5-9"><a href="database-creation.html#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="st">FOREIGN KEY (fish_id) REFERENCES fish(fish_id)</span></span>
-<span id="cb5-10"><a href="database-creation.html#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="st">);&quot;</span>)</span>
-<span id="cb5-11"><a href="database-creation.html#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-12"><a href="database-creation.html#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="do">##Load diet csv into R</span></span>
-<span id="cb5-13"><a href="database-creation.html#cb5-13" aria-hidden="true" tabindex="-1"></a>diet <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;../DataClean/Diet.csv&quot;</span>,</span>
-<span id="cb5-14"><a href="database-creation.html#cb5-14" aria-hidden="true" tabindex="-1"></a>                 <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb5-15"><a href="database-creation.html#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-16"><a href="database-creation.html#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="do">##Check that names align</span></span>
-<span id="cb5-17"><a href="database-creation.html#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(diet)</span>
-<span id="cb5-18"><a href="database-creation.html#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-19"><a href="database-creation.html#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="do">##Write loaded csv into sql table</span></span>
-<span id="cb5-20"><a href="database-creation.html#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="fu">dbWriteTable</span>(rh_db, <span class="st">&quot;diet&quot;</span>, diet, <span class="at">append =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb5-21"><a href="database-creation.html#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-22"><a href="database-creation.html#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="do">##Check that data loaded properly</span></span>
-<span id="cb5-23"><a href="database-creation.html#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="fu">dbGetQuery</span>(rh_db, <span class="st">&quot;SELECT * FROM diet LIMIT 3;&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="database-creation.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">##Create diet table in sql</span></span>
+<span id="cb4-2"><a href="database-creation.html#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(rh_db, <span class="st">&quot;CREATE TABLE diet (</span></span>
+<span id="cb4-3"><a href="database-creation.html#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="st">diet_id char(7) PRIMARY KEY NOT NULL,</span></span>
+<span id="cb4-4"><a href="database-creation.html#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="st">fish_id char(5),</span></span>
+<span id="cb4-5"><a href="database-creation.html#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="st">prey_type varchar(20),</span></span>
+<span id="cb4-6"><a href="database-creation.html#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="st">prey_cat varchar(20),</span></span>
+<span id="cb4-7"><a href="database-creation.html#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="st">total integer(3),</span></span>
+<span id="cb4-8"><a href="database-creation.html#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="st">preybiomass_microg double,</span></span>
+<span id="cb4-9"><a href="database-creation.html#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="st">FOREIGN KEY (fish_id) REFERENCES fish(fish_id)</span></span>
+<span id="cb4-10"><a href="database-creation.html#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="st">);&quot;</span>)</span>
+<span id="cb4-11"><a href="database-creation.html#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="database-creation.html#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="do">##Load diet csv into R</span></span>
+<span id="cb4-13"><a href="database-creation.html#cb4-13" aria-hidden="true" tabindex="-1"></a>diet <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;../DataClean/Diet.csv&quot;</span>,</span>
+<span id="cb4-14"><a href="database-creation.html#cb4-14" aria-hidden="true" tabindex="-1"></a>                 <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-15"><a href="database-creation.html#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="database-creation.html#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="do">##Check that names align</span></span>
+<span id="cb4-17"><a href="database-creation.html#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(diet)</span>
+<span id="cb4-18"><a href="database-creation.html#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="database-creation.html#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="do">##Write loaded csv into sql table</span></span>
+<span id="cb4-20"><a href="database-creation.html#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="fu">dbWriteTable</span>(rh_db, <span class="st">&quot;diet&quot;</span>, diet, <span class="at">append =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-21"><a href="database-creation.html#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="database-creation.html#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="do">##Check that data loaded properly</span></span>
+<span id="cb4-23"><a href="database-creation.html#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="fu">dbGetQuery</span>(rh_db, <span class="st">&quot;SELECT * FROM diet LIMIT 3;&quot;</span>)</span></code></pre></div>
 </div>
 <div id="create-diet_size-table" class="section level2 hasAnchor" number="2.5">
 <h2><span class="header-section-number">2.5</span> Create <strong>DIET_SIZE</strong> table<a href="database-creation.html#create-diet_size-table" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The diet_size table includes the following data: dietsize_id (<em>primary key</em>), fish_id (<strong>foreign key</strong>), lowest possible taxonomic classification of prey (prey_type), prey Order (prey_cat), and the total length (micrometers) of the first twenty individuals of that prey type identified in a fish.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="database-creation.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">##Create diet_size table in sql</span></span>
-<span id="cb6-2"><a href="database-creation.html#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(rh_db, <span class="st">&quot;CREATE TABLE diet_size (</span></span>
-<span id="cb6-3"><a href="database-creation.html#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="st">dietsize_id char(11) PRIMARY KEY NOT NULL,</span></span>
-<span id="cb6-4"><a href="database-creation.html#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="st">fish_id char(5),</span></span>
-<span id="cb6-5"><a href="database-creation.html#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="st">prey_tot double,</span></span>
-<span id="cb6-6"><a href="database-creation.html#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="st">prey_type varchar(20),</span></span>
-<span id="cb6-7"><a href="database-creation.html#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="st">prey_cat varchar(20),</span></span>
-<span id="cb6-8"><a href="database-creation.html#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="st">TL1 double,</span></span>
-<span id="cb6-9"><a href="database-creation.html#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="st">TL2 double,</span></span>
-<span id="cb6-10"><a href="database-creation.html#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="st">TL3 double,</span></span>
-<span id="cb6-11"><a href="database-creation.html#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="st">TL4 double,</span></span>
-<span id="cb6-12"><a href="database-creation.html#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="st">TL5 double,</span></span>
-<span id="cb6-13"><a href="database-creation.html#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="st">TL6 double,</span></span>
-<span id="cb6-14"><a href="database-creation.html#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="st">TL7 double,</span></span>
-<span id="cb6-15"><a href="database-creation.html#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="st">TL8 double,</span></span>
-<span id="cb6-16"><a href="database-creation.html#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="st">TL9 double,</span></span>
-<span id="cb6-17"><a href="database-creation.html#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="st">TL10 double,</span></span>
-<span id="cb6-18"><a href="database-creation.html#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="st">TL11 double,</span></span>
-<span id="cb6-19"><a href="database-creation.html#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="st">TL12 double,</span></span>
-<span id="cb6-20"><a href="database-creation.html#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="st">TL13 doulbe,</span></span>
-<span id="cb6-21"><a href="database-creation.html#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="st">TL14 double,</span></span>
-<span id="cb6-22"><a href="database-creation.html#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="st">TL15 double,</span></span>
-<span id="cb6-23"><a href="database-creation.html#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="st">TL16 double,</span></span>
-<span id="cb6-24"><a href="database-creation.html#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="st">TL17 double,</span></span>
-<span id="cb6-25"><a href="database-creation.html#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="st">TL18 double,</span></span>
-<span id="cb6-26"><a href="database-creation.html#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="st">TL19 double,</span></span>
-<span id="cb6-27"><a href="database-creation.html#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="st">TL20 double,</span></span>
-<span id="cb6-28"><a href="database-creation.html#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="st">FOREIGN KEY (fish_id) REFERENCES fish(fish_id)</span></span>
-<span id="cb6-29"><a href="database-creation.html#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="st">);&quot;</span>)</span>
-<span id="cb6-30"><a href="database-creation.html#cb6-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-31"><a href="database-creation.html#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="do">##Load diet_size csv into R</span></span>
-<span id="cb6-32"><a href="database-creation.html#cb6-32" aria-hidden="true" tabindex="-1"></a>diet_size <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;../DataClean/Diet_Size.csv&quot;</span>,</span>
-<span id="cb6-33"><a href="database-creation.html#cb6-33" aria-hidden="true" tabindex="-1"></a>                 <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb6-34"><a href="database-creation.html#cb6-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-35"><a href="database-creation.html#cb6-35" aria-hidden="true" tabindex="-1"></a><span class="do">##Check that names align</span></span>
-<span id="cb6-36"><a href="database-creation.html#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(diet_size)</span>
-<span id="cb6-37"><a href="database-creation.html#cb6-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-38"><a href="database-creation.html#cb6-38" aria-hidden="true" tabindex="-1"></a><span class="do">##Write loaded csv into sql table</span></span>
-<span id="cb6-39"><a href="database-creation.html#cb6-39" aria-hidden="true" tabindex="-1"></a><span class="fu">dbWriteTable</span>(rh_db, <span class="st">&quot;diet_size&quot;</span>, diet_size, <span class="at">append =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb6-40"><a href="database-creation.html#cb6-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-41"><a href="database-creation.html#cb6-41" aria-hidden="true" tabindex="-1"></a><span class="do">##Check that data loaded properly</span></span>
-<span id="cb6-42"><a href="database-creation.html#cb6-42" aria-hidden="true" tabindex="-1"></a><span class="fu">dbGetQuery</span>(rh_db, <span class="st">&quot;SELECT * FROM diet_size LIMIT 3;&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="database-creation.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">##Create diet_size table in sql</span></span>
+<span id="cb5-2"><a href="database-creation.html#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(rh_db, <span class="st">&quot;CREATE TABLE diet_size (</span></span>
+<span id="cb5-3"><a href="database-creation.html#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="st">dietsize_id char(11) PRIMARY KEY NOT NULL,</span></span>
+<span id="cb5-4"><a href="database-creation.html#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="st">fish_id char(5),</span></span>
+<span id="cb5-5"><a href="database-creation.html#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="st">prey_tot double,</span></span>
+<span id="cb5-6"><a href="database-creation.html#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="st">prey_type varchar(20),</span></span>
+<span id="cb5-7"><a href="database-creation.html#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="st">prey_cat varchar(20),</span></span>
+<span id="cb5-8"><a href="database-creation.html#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="st">TL1 double,</span></span>
+<span id="cb5-9"><a href="database-creation.html#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="st">TL2 double,</span></span>
+<span id="cb5-10"><a href="database-creation.html#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="st">TL3 double,</span></span>
+<span id="cb5-11"><a href="database-creation.html#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="st">TL4 double,</span></span>
+<span id="cb5-12"><a href="database-creation.html#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="st">TL5 double,</span></span>
+<span id="cb5-13"><a href="database-creation.html#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="st">TL6 double,</span></span>
+<span id="cb5-14"><a href="database-creation.html#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="st">TL7 double,</span></span>
+<span id="cb5-15"><a href="database-creation.html#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="st">TL8 double,</span></span>
+<span id="cb5-16"><a href="database-creation.html#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="st">TL9 double,</span></span>
+<span id="cb5-17"><a href="database-creation.html#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="st">TL10 double,</span></span>
+<span id="cb5-18"><a href="database-creation.html#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="st">TL11 double,</span></span>
+<span id="cb5-19"><a href="database-creation.html#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="st">TL12 double,</span></span>
+<span id="cb5-20"><a href="database-creation.html#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="st">TL13 doulbe,</span></span>
+<span id="cb5-21"><a href="database-creation.html#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="st">TL14 double,</span></span>
+<span id="cb5-22"><a href="database-creation.html#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="st">TL15 double,</span></span>
+<span id="cb5-23"><a href="database-creation.html#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="st">TL16 double,</span></span>
+<span id="cb5-24"><a href="database-creation.html#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="st">TL17 double,</span></span>
+<span id="cb5-25"><a href="database-creation.html#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="st">TL18 double,</span></span>
+<span id="cb5-26"><a href="database-creation.html#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="st">TL19 double,</span></span>
+<span id="cb5-27"><a href="database-creation.html#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="st">TL20 double,</span></span>
+<span id="cb5-28"><a href="database-creation.html#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="st">FOREIGN KEY (fish_id) REFERENCES fish(fish_id)</span></span>
+<span id="cb5-29"><a href="database-creation.html#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="st">);&quot;</span>)</span>
+<span id="cb5-30"><a href="database-creation.html#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-31"><a href="database-creation.html#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="do">##Load diet_size csv into R</span></span>
+<span id="cb5-32"><a href="database-creation.html#cb5-32" aria-hidden="true" tabindex="-1"></a>diet_size <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;../DataClean/Diet_Size.csv&quot;</span>,</span>
+<span id="cb5-33"><a href="database-creation.html#cb5-33" aria-hidden="true" tabindex="-1"></a>                 <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-34"><a href="database-creation.html#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-35"><a href="database-creation.html#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="do">##Check that names align</span></span>
+<span id="cb5-36"><a href="database-creation.html#cb5-36" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(diet_size)</span>
+<span id="cb5-37"><a href="database-creation.html#cb5-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-38"><a href="database-creation.html#cb5-38" aria-hidden="true" tabindex="-1"></a><span class="do">##Write loaded csv into sql table</span></span>
+<span id="cb5-39"><a href="database-creation.html#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="fu">dbWriteTable</span>(rh_db, <span class="st">&quot;diet_size&quot;</span>, diet_size, <span class="at">append =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-40"><a href="database-creation.html#cb5-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-41"><a href="database-creation.html#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="do">##Check that data loaded properly</span></span>
+<span id="cb5-42"><a href="database-creation.html#cb5-42" aria-hidden="true" tabindex="-1"></a><span class="fu">dbGetQuery</span>(rh_db, <span class="st">&quot;SELECT * FROM diet_size LIMIT 3;&quot;</span>)</span></code></pre></div>
 </div>
 <div id="create-zp_biomass-table" class="section level2 hasAnchor" number="2.6">
 <h2><span class="header-section-number">2.6</span> Create <strong>ZP_BIOMASS</strong> table<a href="database-creation.html#create-zp_biomass-table" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The zp_biomass table includes the following data: zp_id (<em>primary key</em>), cove, month, covemonth(<strong>foreign key</strong>), sampling site (approximately three unique sites were sampled at each cove, each month), zooplankton genus, zooplankton family, zooplankton order, the number of individual zooplankton per cubic meter of water, and the biomass of zooplankton (micrograms) per cubic meter of water.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="database-creation.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">##Create zp_biomass table in sql</span></span>
-<span id="cb7-2"><a href="database-creation.html#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(rh_db, <span class="st">&quot;CREATE TABLE zp_biomass (</span></span>
-<span id="cb7-3"><a href="database-creation.html#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="st">zp_id char(5) PRIMARY KEY NOT NULL,</span></span>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="database-creation.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">##Create zp_biomass table in sql</span></span>
+<span id="cb6-2"><a href="database-creation.html#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(rh_db, <span class="st">&quot;CREATE TABLE zp_biomass (</span></span>
+<span id="cb6-3"><a href="database-creation.html#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="st">zp_id char(5) PRIMARY KEY NOT NULL,</span></span>
+<span id="cb6-4"><a href="database-creation.html#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="st">cove varchar(12) CHECK (cove IN (&#39;chapman&#39;, &#39;wethersfield&#39;, &#39;hamburg&#39;)),</span></span>
+<span id="cb6-5"><a href="database-creation.html#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="st">month varchar(10) CHECK (month IN (&#39;June&#39;, &#39;July&#39;, &#39;August&#39;, &#39;September&#39;)),</span></span>
+<span id="cb6-6"><a href="database-creation.html#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="st">covemonth varchar(22) CHECK (covemonth IN (&#39;hamburgAugust&#39;, &#39;hamburgJuly&#39;, </span></span>
+<span id="cb6-7"><a href="database-creation.html#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="st">  &#39;hamburgJune&#39;, &#39;hamburgSeptember&#39;, &#39;wethersfieldJune&#39;,  &#39;wethersfieldJuly&#39;, </span></span>
+<span id="cb6-8"><a href="database-creation.html#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="st">  &#39;wethersfieldAugust&#39;, &#39;wethersfieldSeptember&#39;, &#39;chapmanJune&#39;, &#39;chapmanJuly&#39;, </span></span>
+<span id="cb6-9"><a href="database-creation.html#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="st">  &#39;chapmanAugust&#39;, &#39;chapmanSeptember&#39;)),</span></span>
+<span id="cb6-10"><a href="database-creation.html#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="st">site integer(1),</span></span>
+<span id="cb6-11"><a href="database-creation.html#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="st">zp_order varchar(20),</span></span>
+<span id="cb6-12"><a href="database-creation.html#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="st">zp_family varchar(20),</span></span>
+<span id="cb6-13"><a href="database-creation.html#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="st">zp_genus varchar(20),</span></span>
+<span id="cb6-14"><a href="database-creation.html#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="st">zp_indiv_per_m3 double,</span></span>
+<span id="cb6-15"><a href="database-creation.html#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="st">zp_microg_per_m3 double,</span></span>
+<span id="cb6-16"><a href="database-creation.html#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="st">FOREIGN KEY (covemonth) REFERENCES envir(covemonth)</span></span>
+<span id="cb6-17"><a href="database-creation.html#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="st">);&quot;</span>)</span>
+<span id="cb6-18"><a href="database-creation.html#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="database-creation.html#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="do">##Load diet csv into R</span></span>
+<span id="cb6-20"><a href="database-creation.html#cb6-20" aria-hidden="true" tabindex="-1"></a>zp_biomass <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;../DataClean/ZP_Biomass.csv&quot;</span>,</span>
+<span id="cb6-21"><a href="database-creation.html#cb6-21" aria-hidden="true" tabindex="-1"></a>                 <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb6-22"><a href="database-creation.html#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="database-creation.html#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="do">##Check that names align</span></span>
+<span id="cb6-24"><a href="database-creation.html#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(zp_biomass)</span>
+<span id="cb6-25"><a href="database-creation.html#cb6-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-26"><a href="database-creation.html#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="do">##Write loaded csv into sql table</span></span>
+<span id="cb6-27"><a href="database-creation.html#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="fu">dbWriteTable</span>(rh_db, <span class="st">&quot;zp_biomass&quot;</span>, zp_biomass, <span class="at">append =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-28"><a href="database-creation.html#cb6-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-29"><a href="database-creation.html#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="do">##Check that data loaded properly</span></span>
+<span id="cb6-30"><a href="database-creation.html#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="fu">dbGetQuery</span>(rh_db, <span class="st">&quot;SELECT * FROM zp_biomass LIMIT 3;&quot;</span>)</span></code></pre></div>
+</div>
+<div id="create-zp_size-table" class="section level2 hasAnchor" number="2.7">
+<h2><span class="header-section-number">2.7</span> Create <strong>ZP_SIZE</strong> table<a href="database-creation.html#create-zp_size-table" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The zp_size table includes the following data: zpsize_id (<em>primary key</em>), cove, month, covemonth(<strong>foreign key</strong>), sampling site (approximately three unique sites were sampled at each cove, each month), lowest possible taxonomic classification of zooplankton (zp_type), zooplankton order,and the total length (micrometers) of the first twenty individuals of that zooplankton identified at each site at each covemonth combination.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="database-creation.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">##Create zp_size table in sql</span></span>
+<span id="cb7-2"><a href="database-creation.html#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(rh_db, <span class="st">&quot;CREATE TABLE zp_size (</span></span>
+<span id="cb7-3"><a href="database-creation.html#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="st">zpsize_id char(8) PRIMARY KEY NOT NULL,</span></span>
 <span id="cb7-4"><a href="database-creation.html#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="st">cove varchar(12) CHECK (cove IN (&#39;chapman&#39;, &#39;wethersfield&#39;, &#39;hamburg&#39;)),</span></span>
 <span id="cb7-5"><a href="database-creation.html#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="st">month varchar(10) CHECK (month IN (&#39;June&#39;, &#39;July&#39;, &#39;August&#39;, &#39;September&#39;)),</span></span>
 <span id="cb7-6"><a href="database-creation.html#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="st">covemonth varchar(22) CHECK (covemonth IN (&#39;hamburgAugust&#39;, &#39;hamburgJuly&#39;, </span></span>
@@ -352,119 +398,85 @@ Figure 2.1: Schematic of database design
 <span id="cb7-8"><a href="database-creation.html#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="st">  &#39;wethersfieldAugust&#39;, &#39;wethersfieldSeptember&#39;, &#39;chapmanJune&#39;, &#39;chapmanJuly&#39;, </span></span>
 <span id="cb7-9"><a href="database-creation.html#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="st">  &#39;chapmanAugust&#39;, &#39;chapmanSeptember&#39;)),</span></span>
 <span id="cb7-10"><a href="database-creation.html#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="st">site integer(1),</span></span>
-<span id="cb7-11"><a href="database-creation.html#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="st">zp_order varchar(20),</span></span>
-<span id="cb7-12"><a href="database-creation.html#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="st">zp_family varchar(20),</span></span>
-<span id="cb7-13"><a href="database-creation.html#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="st">zp_genus varchar(20),</span></span>
-<span id="cb7-14"><a href="database-creation.html#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="st">zp_indiv_per_m3 double,</span></span>
-<span id="cb7-15"><a href="database-creation.html#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="st">zp_microg_per_m3 double,</span></span>
-<span id="cb7-16"><a href="database-creation.html#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="st">FOREIGN KEY (covemonth) REFERENCES envir(covemonth)</span></span>
-<span id="cb7-17"><a href="database-creation.html#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="st">);&quot;</span>)</span>
-<span id="cb7-18"><a href="database-creation.html#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-19"><a href="database-creation.html#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="do">##Load diet csv into R</span></span>
-<span id="cb7-20"><a href="database-creation.html#cb7-20" aria-hidden="true" tabindex="-1"></a>zp_biomass <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;../DataClean/ZP_Biomass.csv&quot;</span>,</span>
-<span id="cb7-21"><a href="database-creation.html#cb7-21" aria-hidden="true" tabindex="-1"></a>                 <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb7-22"><a href="database-creation.html#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-23"><a href="database-creation.html#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="do">##Check that names align</span></span>
-<span id="cb7-24"><a href="database-creation.html#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(zp_biomass)</span>
-<span id="cb7-25"><a href="database-creation.html#cb7-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-26"><a href="database-creation.html#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="do">##Write loaded csv into sql table</span></span>
-<span id="cb7-27"><a href="database-creation.html#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="fu">dbWriteTable</span>(rh_db, <span class="st">&quot;zp_biomass&quot;</span>, zp_biomass, <span class="at">append =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb7-28"><a href="database-creation.html#cb7-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-29"><a href="database-creation.html#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="do">##Check that data loaded properly</span></span>
-<span id="cb7-30"><a href="database-creation.html#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="fu">dbGetQuery</span>(rh_db, <span class="st">&quot;SELECT * FROM zp_biomass LIMIT 3;&quot;</span>)</span></code></pre></div>
-</div>
-<div id="create-zp_size-table" class="section level2 hasAnchor" number="2.7">
-<h2><span class="header-section-number">2.7</span> Create <strong>ZP_SIZE</strong> table<a href="database-creation.html#create-zp_size-table" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The zp_size table includes the following data: zpsize_id (<em>primary key</em>), cove, month, covemonth(<strong>foreign key</strong>), sampling site (approximately three unique sites were sampled at each cove, each month), lowest possible taxonomic classification of zooplankton (zp_type), zooplankton order,and the total length (micrometers) of the first twenty individuals of that zooplankton identified at each site at each covemonth combination.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="database-creation.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="do">##Create zp_size table in sql</span></span>
-<span id="cb8-2"><a href="database-creation.html#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dbExecute</span>(rh_db, <span class="st">&quot;CREATE TABLE zp_size (</span></span>
-<span id="cb8-3"><a href="database-creation.html#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="st">zpsize_id char(8) PRIMARY KEY NOT NULL,</span></span>
-<span id="cb8-4"><a href="database-creation.html#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="st">cove varchar(12) CHECK (cove IN (&#39;chapman&#39;, &#39;wethersfield&#39;, &#39;hamburg&#39;)),</span></span>
-<span id="cb8-5"><a href="database-creation.html#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="st">month varchar(10) CHECK (month IN (&#39;June&#39;, &#39;July&#39;, &#39;August&#39;, &#39;September&#39;)),</span></span>
-<span id="cb8-6"><a href="database-creation.html#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="st">covemonth varchar(22) CHECK (covemonth IN (&#39;hamburgAugust&#39;, &#39;hamburgJuly&#39;, </span></span>
-<span id="cb8-7"><a href="database-creation.html#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="st">  &#39;hamburgJune&#39;, &#39;hamburgSeptember&#39;, &#39;wethersfieldJune&#39;,  &#39;wethersfieldJuly&#39;, </span></span>
-<span id="cb8-8"><a href="database-creation.html#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="st">  &#39;wethersfieldAugust&#39;, &#39;wethersfieldSeptember&#39;, &#39;chapmanJune&#39;, &#39;chapmanJuly&#39;, </span></span>
-<span id="cb8-9"><a href="database-creation.html#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="st">  &#39;chapmanAugust&#39;, &#39;chapmanSeptember&#39;)),</span></span>
-<span id="cb8-10"><a href="database-creation.html#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="st">site integer(1),</span></span>
-<span id="cb8-11"><a href="database-creation.html#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="st">zp_type varchar(20),</span></span>
-<span id="cb8-12"><a href="database-creation.html#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="st">zp_order varchar(20),</span></span>
-<span id="cb8-13"><a href="database-creation.html#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="st">TL1 double,</span></span>
-<span id="cb8-14"><a href="database-creation.html#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="st">TL2 double,</span></span>
-<span id="cb8-15"><a href="database-creation.html#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="st">TL3 double,</span></span>
-<span id="cb8-16"><a href="database-creation.html#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="st">TL4 double,</span></span>
-<span id="cb8-17"><a href="database-creation.html#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="st">TL5 double,</span></span>
-<span id="cb8-18"><a href="database-creation.html#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="st">TL6 double,</span></span>
-<span id="cb8-19"><a href="database-creation.html#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="st">TL7 double,</span></span>
-<span id="cb8-20"><a href="database-creation.html#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="st">TL8 double,</span></span>
-<span id="cb8-21"><a href="database-creation.html#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="st">TL9 double,</span></span>
-<span id="cb8-22"><a href="database-creation.html#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="st">TL10 double,</span></span>
-<span id="cb8-23"><a href="database-creation.html#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="st">TL11 double,</span></span>
-<span id="cb8-24"><a href="database-creation.html#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="st">TL12 double,</span></span>
-<span id="cb8-25"><a href="database-creation.html#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="st">TL13 doulbe,</span></span>
-<span id="cb8-26"><a href="database-creation.html#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="st">TL14 double,</span></span>
-<span id="cb8-27"><a href="database-creation.html#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="st">TL15 double,</span></span>
-<span id="cb8-28"><a href="database-creation.html#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="st">TL16 double,</span></span>
-<span id="cb8-29"><a href="database-creation.html#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="st">TL17 double,</span></span>
-<span id="cb8-30"><a href="database-creation.html#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="st">TL18 double,</span></span>
-<span id="cb8-31"><a href="database-creation.html#cb8-31" aria-hidden="true" tabindex="-1"></a><span class="st">TL19 double,</span></span>
-<span id="cb8-32"><a href="database-creation.html#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="st">TL20 double,</span></span>
-<span id="cb8-33"><a href="database-creation.html#cb8-33" aria-hidden="true" tabindex="-1"></a><span class="st">TL21 double,</span></span>
-<span id="cb8-34"><a href="database-creation.html#cb8-34" aria-hidden="true" tabindex="-1"></a><span class="st">TL22 double,</span></span>
-<span id="cb8-35"><a href="database-creation.html#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="st">TL23 double,</span></span>
-<span id="cb8-36"><a href="database-creation.html#cb8-36" aria-hidden="true" tabindex="-1"></a><span class="st">TL24 double,</span></span>
-<span id="cb8-37"><a href="database-creation.html#cb8-37" aria-hidden="true" tabindex="-1"></a><span class="st">TL25 double,</span></span>
-<span id="cb8-38"><a href="database-creation.html#cb8-38" aria-hidden="true" tabindex="-1"></a><span class="st">TL26 double,</span></span>
-<span id="cb8-39"><a href="database-creation.html#cb8-39" aria-hidden="true" tabindex="-1"></a><span class="st">TL27 double,</span></span>
-<span id="cb8-40"><a href="database-creation.html#cb8-40" aria-hidden="true" tabindex="-1"></a><span class="st">TL28 double,</span></span>
-<span id="cb8-41"><a href="database-creation.html#cb8-41" aria-hidden="true" tabindex="-1"></a><span class="st">TL29 double,</span></span>
-<span id="cb8-42"><a href="database-creation.html#cb8-42" aria-hidden="true" tabindex="-1"></a><span class="st">TL30 double,</span></span>
-<span id="cb8-43"><a href="database-creation.html#cb8-43" aria-hidden="true" tabindex="-1"></a><span class="st">TL31 double,</span></span>
-<span id="cb8-44"><a href="database-creation.html#cb8-44" aria-hidden="true" tabindex="-1"></a><span class="st">TL32 double,</span></span>
-<span id="cb8-45"><a href="database-creation.html#cb8-45" aria-hidden="true" tabindex="-1"></a><span class="st">TL33 double,</span></span>
-<span id="cb8-46"><a href="database-creation.html#cb8-46" aria-hidden="true" tabindex="-1"></a><span class="st">TL34 double,</span></span>
-<span id="cb8-47"><a href="database-creation.html#cb8-47" aria-hidden="true" tabindex="-1"></a><span class="st">TL35 double,</span></span>
-<span id="cb8-48"><a href="database-creation.html#cb8-48" aria-hidden="true" tabindex="-1"></a><span class="st">TL36 double,</span></span>
-<span id="cb8-49"><a href="database-creation.html#cb8-49" aria-hidden="true" tabindex="-1"></a><span class="st">TL37 double,</span></span>
-<span id="cb8-50"><a href="database-creation.html#cb8-50" aria-hidden="true" tabindex="-1"></a><span class="st">TL38 double,</span></span>
-<span id="cb8-51"><a href="database-creation.html#cb8-51" aria-hidden="true" tabindex="-1"></a><span class="st">TL39 double,</span></span>
-<span id="cb8-52"><a href="database-creation.html#cb8-52" aria-hidden="true" tabindex="-1"></a><span class="st">TL40 double,</span></span>
-<span id="cb8-53"><a href="database-creation.html#cb8-53" aria-hidden="true" tabindex="-1"></a><span class="st">TL41 double,</span></span>
-<span id="cb8-54"><a href="database-creation.html#cb8-54" aria-hidden="true" tabindex="-1"></a><span class="st">TL42 double,</span></span>
-<span id="cb8-55"><a href="database-creation.html#cb8-55" aria-hidden="true" tabindex="-1"></a><span class="st">TL43 double,</span></span>
-<span id="cb8-56"><a href="database-creation.html#cb8-56" aria-hidden="true" tabindex="-1"></a><span class="st">TL44 double,</span></span>
-<span id="cb8-57"><a href="database-creation.html#cb8-57" aria-hidden="true" tabindex="-1"></a><span class="st">TL45 double,</span></span>
-<span id="cb8-58"><a href="database-creation.html#cb8-58" aria-hidden="true" tabindex="-1"></a><span class="st">TL46 double,</span></span>
-<span id="cb8-59"><a href="database-creation.html#cb8-59" aria-hidden="true" tabindex="-1"></a><span class="st">TL47 double,</span></span>
-<span id="cb8-60"><a href="database-creation.html#cb8-60" aria-hidden="true" tabindex="-1"></a><span class="st">TL48 double,</span></span>
-<span id="cb8-61"><a href="database-creation.html#cb8-61" aria-hidden="true" tabindex="-1"></a><span class="st">TL49 double,</span></span>
-<span id="cb8-62"><a href="database-creation.html#cb8-62" aria-hidden="true" tabindex="-1"></a><span class="st">TL50 double,</span></span>
-<span id="cb8-63"><a href="database-creation.html#cb8-63" aria-hidden="true" tabindex="-1"></a><span class="st">TL51 double,</span></span>
-<span id="cb8-64"><a href="database-creation.html#cb8-64" aria-hidden="true" tabindex="-1"></a><span class="st">TL52 double,</span></span>
-<span id="cb8-65"><a href="database-creation.html#cb8-65" aria-hidden="true" tabindex="-1"></a><span class="st">TL53 double,</span></span>
-<span id="cb8-66"><a href="database-creation.html#cb8-66" aria-hidden="true" tabindex="-1"></a><span class="st">TL54 double,</span></span>
-<span id="cb8-67"><a href="database-creation.html#cb8-67" aria-hidden="true" tabindex="-1"></a><span class="st">TL55 double,</span></span>
-<span id="cb8-68"><a href="database-creation.html#cb8-68" aria-hidden="true" tabindex="-1"></a><span class="st">TL56 double,</span></span>
-<span id="cb8-69"><a href="database-creation.html#cb8-69" aria-hidden="true" tabindex="-1"></a><span class="st">TL57 double,</span></span>
-<span id="cb8-70"><a href="database-creation.html#cb8-70" aria-hidden="true" tabindex="-1"></a><span class="st">TL58 double,</span></span>
-<span id="cb8-71"><a href="database-creation.html#cb8-71" aria-hidden="true" tabindex="-1"></a><span class="st">TL59 double,</span></span>
-<span id="cb8-72"><a href="database-creation.html#cb8-72" aria-hidden="true" tabindex="-1"></a><span class="st">TL60 double,</span></span>
-<span id="cb8-73"><a href="database-creation.html#cb8-73" aria-hidden="true" tabindex="-1"></a><span class="st">FOREIGN KEY (covemonth) REFERENCES envir(covemonth)</span></span>
-<span id="cb8-74"><a href="database-creation.html#cb8-74" aria-hidden="true" tabindex="-1"></a><span class="st">);&quot;</span>)</span>
-<span id="cb8-75"><a href="database-creation.html#cb8-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-76"><a href="database-creation.html#cb8-76" aria-hidden="true" tabindex="-1"></a><span class="do">##Load diet_size csv into R</span></span>
-<span id="cb8-77"><a href="database-creation.html#cb8-77" aria-hidden="true" tabindex="-1"></a>zp_size <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;../DataClean/ZP_Size.csv&quot;</span>,</span>
-<span id="cb8-78"><a href="database-creation.html#cb8-78" aria-hidden="true" tabindex="-1"></a>                      <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb8-79"><a href="database-creation.html#cb8-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-80"><a href="database-creation.html#cb8-80" aria-hidden="true" tabindex="-1"></a>zp_size[zp_size <span class="sc">==</span> <span class="st">&#39;&#39;</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
-<span id="cb8-81"><a href="database-creation.html#cb8-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-82"><a href="database-creation.html#cb8-82" aria-hidden="true" tabindex="-1"></a><span class="do">##Check that names align</span></span>
-<span id="cb8-83"><a href="database-creation.html#cb8-83" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(zp_size)</span>
-<span id="cb8-84"><a href="database-creation.html#cb8-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-85"><a href="database-creation.html#cb8-85" aria-hidden="true" tabindex="-1"></a><span class="do">##Write loaded csv into sql table</span></span>
-<span id="cb8-86"><a href="database-creation.html#cb8-86" aria-hidden="true" tabindex="-1"></a><span class="fu">dbWriteTable</span>(rh_db, <span class="st">&quot;zp_size&quot;</span>, zp_size, <span class="at">append =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb8-87"><a href="database-creation.html#cb8-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-88"><a href="database-creation.html#cb8-88" aria-hidden="true" tabindex="-1"></a><span class="do">##Check that data loaded properly</span></span>
-<span id="cb8-89"><a href="database-creation.html#cb8-89" aria-hidden="true" tabindex="-1"></a><span class="fu">dbGetQuery</span>(rh_db, <span class="st">&quot;SELECT * FROM zp_size LIMIT 3;&quot;</span>)</span></code></pre></div>
+<span id="cb7-11"><a href="database-creation.html#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="st">zp_type varchar(20),</span></span>
+<span id="cb7-12"><a href="database-creation.html#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="st">zp_order varchar(20),</span></span>
+<span id="cb7-13"><a href="database-creation.html#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="st">TL1 double,</span></span>
+<span id="cb7-14"><a href="database-creation.html#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="st">TL2 double,</span></span>
+<span id="cb7-15"><a href="database-creation.html#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="st">TL3 double,</span></span>
+<span id="cb7-16"><a href="database-creation.html#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="st">TL4 double,</span></span>
+<span id="cb7-17"><a href="database-creation.html#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="st">TL5 double,</span></span>
+<span id="cb7-18"><a href="database-creation.html#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="st">TL6 double,</span></span>
+<span id="cb7-19"><a href="database-creation.html#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="st">TL7 double,</span></span>
+<span id="cb7-20"><a href="database-creation.html#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="st">TL8 double,</span></span>
+<span id="cb7-21"><a href="database-creation.html#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="st">TL9 double,</span></span>
+<span id="cb7-22"><a href="database-creation.html#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="st">TL10 double,</span></span>
+<span id="cb7-23"><a href="database-creation.html#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="st">TL11 double,</span></span>
+<span id="cb7-24"><a href="database-creation.html#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="st">TL12 double,</span></span>
+<span id="cb7-25"><a href="database-creation.html#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="st">TL13 doulbe,</span></span>
+<span id="cb7-26"><a href="database-creation.html#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="st">TL14 double,</span></span>
+<span id="cb7-27"><a href="database-creation.html#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="st">TL15 double,</span></span>
+<span id="cb7-28"><a href="database-creation.html#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="st">TL16 double,</span></span>
+<span id="cb7-29"><a href="database-creation.html#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="st">TL17 double,</span></span>
+<span id="cb7-30"><a href="database-creation.html#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="st">TL18 double,</span></span>
+<span id="cb7-31"><a href="database-creation.html#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="st">TL19 double,</span></span>
+<span id="cb7-32"><a href="database-creation.html#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="st">TL20 double,</span></span>
+<span id="cb7-33"><a href="database-creation.html#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="st">TL21 double,</span></span>
+<span id="cb7-34"><a href="database-creation.html#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="st">TL22 double,</span></span>
+<span id="cb7-35"><a href="database-creation.html#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="st">TL23 double,</span></span>
+<span id="cb7-36"><a href="database-creation.html#cb7-36" aria-hidden="true" tabindex="-1"></a><span class="st">TL24 double,</span></span>
+<span id="cb7-37"><a href="database-creation.html#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="st">TL25 double,</span></span>
+<span id="cb7-38"><a href="database-creation.html#cb7-38" aria-hidden="true" tabindex="-1"></a><span class="st">TL26 double,</span></span>
+<span id="cb7-39"><a href="database-creation.html#cb7-39" aria-hidden="true" tabindex="-1"></a><span class="st">TL27 double,</span></span>
+<span id="cb7-40"><a href="database-creation.html#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="st">TL28 double,</span></span>
+<span id="cb7-41"><a href="database-creation.html#cb7-41" aria-hidden="true" tabindex="-1"></a><span class="st">TL29 double,</span></span>
+<span id="cb7-42"><a href="database-creation.html#cb7-42" aria-hidden="true" tabindex="-1"></a><span class="st">TL30 double,</span></span>
+<span id="cb7-43"><a href="database-creation.html#cb7-43" aria-hidden="true" tabindex="-1"></a><span class="st">TL31 double,</span></span>
+<span id="cb7-44"><a href="database-creation.html#cb7-44" aria-hidden="true" tabindex="-1"></a><span class="st">TL32 double,</span></span>
+<span id="cb7-45"><a href="database-creation.html#cb7-45" aria-hidden="true" tabindex="-1"></a><span class="st">TL33 double,</span></span>
+<span id="cb7-46"><a href="database-creation.html#cb7-46" aria-hidden="true" tabindex="-1"></a><span class="st">TL34 double,</span></span>
+<span id="cb7-47"><a href="database-creation.html#cb7-47" aria-hidden="true" tabindex="-1"></a><span class="st">TL35 double,</span></span>
+<span id="cb7-48"><a href="database-creation.html#cb7-48" aria-hidden="true" tabindex="-1"></a><span class="st">TL36 double,</span></span>
+<span id="cb7-49"><a href="database-creation.html#cb7-49" aria-hidden="true" tabindex="-1"></a><span class="st">TL37 double,</span></span>
+<span id="cb7-50"><a href="database-creation.html#cb7-50" aria-hidden="true" tabindex="-1"></a><span class="st">TL38 double,</span></span>
+<span id="cb7-51"><a href="database-creation.html#cb7-51" aria-hidden="true" tabindex="-1"></a><span class="st">TL39 double,</span></span>
+<span id="cb7-52"><a href="database-creation.html#cb7-52" aria-hidden="true" tabindex="-1"></a><span class="st">TL40 double,</span></span>
+<span id="cb7-53"><a href="database-creation.html#cb7-53" aria-hidden="true" tabindex="-1"></a><span class="st">TL41 double,</span></span>
+<span id="cb7-54"><a href="database-creation.html#cb7-54" aria-hidden="true" tabindex="-1"></a><span class="st">TL42 double,</span></span>
+<span id="cb7-55"><a href="database-creation.html#cb7-55" aria-hidden="true" tabindex="-1"></a><span class="st">TL43 double,</span></span>
+<span id="cb7-56"><a href="database-creation.html#cb7-56" aria-hidden="true" tabindex="-1"></a><span class="st">TL44 double,</span></span>
+<span id="cb7-57"><a href="database-creation.html#cb7-57" aria-hidden="true" tabindex="-1"></a><span class="st">TL45 double,</span></span>
+<span id="cb7-58"><a href="database-creation.html#cb7-58" aria-hidden="true" tabindex="-1"></a><span class="st">TL46 double,</span></span>
+<span id="cb7-59"><a href="database-creation.html#cb7-59" aria-hidden="true" tabindex="-1"></a><span class="st">TL47 double,</span></span>
+<span id="cb7-60"><a href="database-creation.html#cb7-60" aria-hidden="true" tabindex="-1"></a><span class="st">TL48 double,</span></span>
+<span id="cb7-61"><a href="database-creation.html#cb7-61" aria-hidden="true" tabindex="-1"></a><span class="st">TL49 double,</span></span>
+<span id="cb7-62"><a href="database-creation.html#cb7-62" aria-hidden="true" tabindex="-1"></a><span class="st">TL50 double,</span></span>
+<span id="cb7-63"><a href="database-creation.html#cb7-63" aria-hidden="true" tabindex="-1"></a><span class="st">TL51 double,</span></span>
+<span id="cb7-64"><a href="database-creation.html#cb7-64" aria-hidden="true" tabindex="-1"></a><span class="st">TL52 double,</span></span>
+<span id="cb7-65"><a href="database-creation.html#cb7-65" aria-hidden="true" tabindex="-1"></a><span class="st">TL53 double,</span></span>
+<span id="cb7-66"><a href="database-creation.html#cb7-66" aria-hidden="true" tabindex="-1"></a><span class="st">TL54 double,</span></span>
+<span id="cb7-67"><a href="database-creation.html#cb7-67" aria-hidden="true" tabindex="-1"></a><span class="st">TL55 double,</span></span>
+<span id="cb7-68"><a href="database-creation.html#cb7-68" aria-hidden="true" tabindex="-1"></a><span class="st">TL56 double,</span></span>
+<span id="cb7-69"><a href="database-creation.html#cb7-69" aria-hidden="true" tabindex="-1"></a><span class="st">TL57 double,</span></span>
+<span id="cb7-70"><a href="database-creation.html#cb7-70" aria-hidden="true" tabindex="-1"></a><span class="st">TL58 double,</span></span>
+<span id="cb7-71"><a href="database-creation.html#cb7-71" aria-hidden="true" tabindex="-1"></a><span class="st">TL59 double,</span></span>
+<span id="cb7-72"><a href="database-creation.html#cb7-72" aria-hidden="true" tabindex="-1"></a><span class="st">TL60 double,</span></span>
+<span id="cb7-73"><a href="database-creation.html#cb7-73" aria-hidden="true" tabindex="-1"></a><span class="st">FOREIGN KEY (covemonth) REFERENCES envir(covemonth)</span></span>
+<span id="cb7-74"><a href="database-creation.html#cb7-74" aria-hidden="true" tabindex="-1"></a><span class="st">);&quot;</span>)</span>
+<span id="cb7-75"><a href="database-creation.html#cb7-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-76"><a href="database-creation.html#cb7-76" aria-hidden="true" tabindex="-1"></a><span class="do">##Load diet_size csv into R</span></span>
+<span id="cb7-77"><a href="database-creation.html#cb7-77" aria-hidden="true" tabindex="-1"></a>zp_size <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;../DataClean/ZP_Size.csv&quot;</span>,</span>
+<span id="cb7-78"><a href="database-creation.html#cb7-78" aria-hidden="true" tabindex="-1"></a>                      <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-79"><a href="database-creation.html#cb7-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-80"><a href="database-creation.html#cb7-80" aria-hidden="true" tabindex="-1"></a>zp_size[zp_size <span class="sc">==</span> <span class="st">&#39;&#39;</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb7-81"><a href="database-creation.html#cb7-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-82"><a href="database-creation.html#cb7-82" aria-hidden="true" tabindex="-1"></a><span class="do">##Check that names align</span></span>
+<span id="cb7-83"><a href="database-creation.html#cb7-83" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(zp_size)</span>
+<span id="cb7-84"><a href="database-creation.html#cb7-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-85"><a href="database-creation.html#cb7-85" aria-hidden="true" tabindex="-1"></a><span class="do">##Write loaded csv into sql table</span></span>
+<span id="cb7-86"><a href="database-creation.html#cb7-86" aria-hidden="true" tabindex="-1"></a><span class="fu">dbWriteTable</span>(rh_db, <span class="st">&quot;zp_size&quot;</span>, zp_size, <span class="at">append =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-87"><a href="database-creation.html#cb7-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-88"><a href="database-creation.html#cb7-88" aria-hidden="true" tabindex="-1"></a><span class="do">##Check that data loaded properly</span></span>
+<span id="cb7-89"><a href="database-creation.html#cb7-89" aria-hidden="true" tabindex="-1"></a><span class="fu">dbGetQuery</span>(rh_db, <span class="st">&quot;SELECT * FROM zp_size LIMIT 3;&quot;</span>)</span></code></pre></div>
 
 </div>
 </div>

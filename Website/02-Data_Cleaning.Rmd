@@ -1,7 +1,5 @@
-
-`r if (knitr::is_html_output()) '
 # Data Cleaning
-'`
+
 ## Load data
 
 ### Load the river herring database and all the tables it contains
@@ -99,8 +97,10 @@ zpwc <- zp_biomass %>%
   mutate(perctot = cattot/covmonthtot) %>% #Step 5
   select(1:4, 11) %>%
   distinct() %>% #Step 6
-  mutate(gutwater = "water column") %>% #Step 7
+  mutate(gutwater = "watercolumn") %>% #Step 7
   rename(category = zp_order) #Step 8
+
+zpwc$category <- str_replace_all(zpwc$category, 'Cyclopoida', 'Copepoda')
 ```
 
 ### The steps for the prey data preparation are as follows:
@@ -140,11 +140,11 @@ zpgc <- diet %>%
 
 ```
 
-### The steps for combining the data sets are as follows:
+### The steps for combining the data sets and calculating selectivity are as follows:
 
 1. Bind the two datasets
   
-2. Filter the dataset to only include the top four categories--- Cladocera, Ostracoda, Copepoda, Ploima
+2. Filter the dataset to only include the top four categories--- Cladocera, Copepoda, Ploima
   
 3. Factor the month levels
   
@@ -154,11 +154,37 @@ zpgc <- diet %>%
 #Create data set with water column and gut content data
 zpwcgc <- rbind(zpwc, zpgc) %>%
   filter(category == "Cladocera" | 
-           category == "Ostracoda" | 
            category == "Copepoda" | 
-           category == "Ploima")
+           category == "Ploima") %>%
+  filter(month == "July" |
+           month == "August" |
+           month == "September")
+  
 
-zpwcgc$month <- factor(zpwcgc$month, levels = c("June", "July", "August", "September"))
+zpwcgc$month <- factor(zpwcgc$month, levels = c("July", "August", "September"))
 zpwcgc$cove <- factor(zpwcgc$cove, levels = c("wethersfield", "chapman", "hamburg"))
+
+zpwcgcwide <- zpwcgc %>%
+  pivot_wider(names_from = gutwater,
+              values_from = perctot) %>%
+  mutate(selectivity = (gut-watercolumn)/(gut+watercolumn))
+
+zpwcgcwide[9,6] = 0 #Replace NA under Wethersfield/September/Ploima with actual 0
+zpwcgcwide[27,5] = 0 #Replace NA under Chapman/July/Copepoda with actual 0
+
+#Cannot calculate selectivity values for Ostracoda because they were not sampled
+#from the environment. Instead a data set for Ostracoda percent of total prey
+#items is needed created
+
+ostra <- zpgc %>%
+  filter(category == "Ostracoda") %>%
+  add_row (cove = "wethersfield", month = "July", 
+           covemonth = "wethersfieldJuly", category = "Ostracoda", perctot = 0, 
+           gutwater = "gut") %>%
+  mutate(actperc = perctot * 100)
+  #Add a row with actual 0 for Wethersfield/July/Ostracoda
+
+ostra$month <- factor(ostra$month, levels = c("July", "August", "September"))
+ostra$cove <- factor(ostra$cove, levels = c("wethersfield", "chapman", "hamburg"))
 
 ```

@@ -1,10 +1,6 @@
 --- 
 title: "Juvenile River Herring: Diet, habitat, and food resources from the Connecticut River"
 author: "Meghan Slocombe"
-output: 
-  html_document:
-    theme:
-      bootswatch: morph
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 documentclass: book
@@ -25,7 +21,6 @@ River herring (alewife *Alosa pseudoharengus* and blueback herring *A. aestivali
   
 ```{r image1, fig.cap="Juvenile river herring", fig.align='center', out.width='100%', echo=FALSE}
 knitr::include_graphics("Fiish.png")
-getwd()
 ```
 
 ## Institution 
@@ -34,7 +29,7 @@ This research was conducted at the University of Massachusetts Amherst in fulfil
 
 ## Study Sites
 
-The study sites were Hamburg Cove, Chapman Pond, and Wethersfield Cove (Figure 1.2).
+The study sites were Wethersfield Cove, Chapman Pond, and, Hamburg Cove.
 
 ```{r image2, fig.cap="Map of sampled coves along the Connecticut River, oriented with North at the top", fig.align='center', out.width='70%', echo=FALSE}
 knitr::include_graphics("Map.png")

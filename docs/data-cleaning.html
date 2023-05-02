@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="database-creation.html"/>
-<link rel="next" href="references.html"/>
+<link rel="next" href="data-visualizations.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -165,7 +165,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="3.3.1" data-path="data-cleaning.html"><a href="data-cleaning.html#the-steps-for-the-zooplankton-data-preparation-are-as-follows"><i class="fa fa-check"></i><b>3.3.1</b> The steps for the zooplankton data preparation are as follows:</a></li>
 <li class="chapter" data-level="3.3.2" data-path="data-cleaning.html"><a href="data-cleaning.html#the-steps-for-the-prey-data-preparation-are-as-follows"><i class="fa fa-check"></i><b>3.3.2</b> The steps for the prey data preparation are as follows:</a></li>
-<li class="chapter" data-level="3.3.3" data-path="data-cleaning.html"><a href="data-cleaning.html#the-steps-for-combining-the-data-sets-are-as-follows"><i class="fa fa-check"></i><b>3.3.3</b> The steps for combining the data sets are as follows:</a></li>
+<li class="chapter" data-level="3.3.3" data-path="data-cleaning.html"><a href="data-cleaning.html#the-steps-for-combining-the-data-sets-and-calculating-selectivity-are-as-follows"><i class="fa fa-check"></i><b>3.3.3</b> The steps for combining the data sets and calculating selectivity are as follows:</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="data-visualizations.html"><a href="data-visualizations.html"><i class="fa fa-check"></i><b>4</b> Data Visualizations</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="data-visualizations.html"><a href="data-visualizations.html#scatterplots-fish-and-prey"><i class="fa fa-check"></i><b>4.1</b> Scatterplots, fish and prey</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="data-visualizations.html"><a href="data-visualizations.html#use-ggplot-to-create-a-scatterplot-of-average-prey-length-by-fish-length"><i class="fa fa-check"></i><b>4.1.1</b> Use ggplot to create a scatterplot of average prey length by fish length</a></li>
+<li class="chapter" data-level="4.1.2" data-path="data-visualizations.html"><a href="data-visualizations.html#use-ggplot-to-create-a-scatterplot-of-average-prey-length-by-fish-age"><i class="fa fa-check"></i><b>4.1.2</b> Use ggplot to create a scatterplot of average prey length by fish age</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="data-visualizations.html"><a href="data-visualizations.html#selectivity-plot"><i class="fa fa-check"></i><b>4.2</b> Selectivity plot</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="data-visualizations.html"><a href="data-visualizations.html#use-ggplot-to-create-a-graph-of-selectivity-of-different-prey-categories-across-months-and-sites"><i class="fa fa-check"></i><b>4.2.1</b> Use ggplot to create a graph of selectivity of different prey categories across months and sites</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -195,20 +207,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">3.1</span> Load data<a href="data-cleaning.html#load-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="load-the-river-herring-database-and-all-the-tables-it-contains" class="section level3 hasAnchor" number="3.1.1">
 <h3><span class="header-section-number">3.1.1</span> Load the river herring database and all the tables it contains<a href="data-cleaning.html#load-the-river-herring-database-and-all-the-tables-it-contains" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="data-cleaning.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb9-2"><a href="data-cleaning.html#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
-<span id="cb9-3"><a href="data-cleaning.html#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="data-cleaning.html#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Load database</span></span>
-<span id="cb9-5"><a href="data-cleaning.html#cb9-5" aria-hidden="true" tabindex="-1"></a>rh_db <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(),</span>
-<span id="cb9-6"><a href="data-cleaning.html#cb9-6" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;../DataClean/rh.db&quot;</span>)</span>
-<span id="cb9-7"><a href="data-cleaning.html#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-8"><a href="data-cleaning.html#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Load tables</span></span>
-<span id="cb9-9"><a href="data-cleaning.html#cb9-9" aria-hidden="true" tabindex="-1"></a>fish <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(rh_db, <span class="st">&quot;SELECT * FROM fish;&quot;</span>)</span>
-<span id="cb9-10"><a href="data-cleaning.html#cb9-10" aria-hidden="true" tabindex="-1"></a>envir <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(rh_db, <span class="st">&quot;SELECT * FROM envir;&quot;</span>)</span>
-<span id="cb9-11"><a href="data-cleaning.html#cb9-11" aria-hidden="true" tabindex="-1"></a>diet <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(rh_db, <span class="st">&quot;SELECT * FROM diet;&quot;</span>)</span>
-<span id="cb9-12"><a href="data-cleaning.html#cb9-12" aria-hidden="true" tabindex="-1"></a>diet_size <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(rh_db, <span class="st">&quot;SELECT * FROM diet_size;&quot;</span>)</span>
-<span id="cb9-13"><a href="data-cleaning.html#cb9-13" aria-hidden="true" tabindex="-1"></a>zp_biomass <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(rh_db, <span class="st">&quot;SELECT * FROM zp_biomass;&quot;</span>)</span>
-<span id="cb9-14"><a href="data-cleaning.html#cb9-14" aria-hidden="true" tabindex="-1"></a>zp_size <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(rh_db, <span class="st">&quot;SELECT * FROM zp_size;&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="data-cleaning.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb8-2"><a href="data-cleaning.html#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
+<span id="cb8-3"><a href="data-cleaning.html#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="data-cleaning.html#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Load database</span></span>
+<span id="cb8-5"><a href="data-cleaning.html#cb8-5" aria-hidden="true" tabindex="-1"></a>rh_db <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RSQLite<span class="sc">::</span><span class="fu">SQLite</span>(),</span>
+<span id="cb8-6"><a href="data-cleaning.html#cb8-6" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;../DataClean/rh.db&quot;</span>)</span>
+<span id="cb8-7"><a href="data-cleaning.html#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="data-cleaning.html#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Load tables</span></span>
+<span id="cb8-9"><a href="data-cleaning.html#cb8-9" aria-hidden="true" tabindex="-1"></a>fish <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(rh_db, <span class="st">&quot;SELECT * FROM fish;&quot;</span>)</span>
+<span id="cb8-10"><a href="data-cleaning.html#cb8-10" aria-hidden="true" tabindex="-1"></a>envir <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(rh_db, <span class="st">&quot;SELECT * FROM envir;&quot;</span>)</span>
+<span id="cb8-11"><a href="data-cleaning.html#cb8-11" aria-hidden="true" tabindex="-1"></a>diet <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(rh_db, <span class="st">&quot;SELECT * FROM diet;&quot;</span>)</span>
+<span id="cb8-12"><a href="data-cleaning.html#cb8-12" aria-hidden="true" tabindex="-1"></a>diet_size <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(rh_db, <span class="st">&quot;SELECT * FROM diet_size;&quot;</span>)</span>
+<span id="cb8-13"><a href="data-cleaning.html#cb8-13" aria-hidden="true" tabindex="-1"></a>zp_biomass <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(rh_db, <span class="st">&quot;SELECT * FROM zp_biomass;&quot;</span>)</span>
+<span id="cb8-14"><a href="data-cleaning.html#cb8-14" aria-hidden="true" tabindex="-1"></a>zp_size <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(rh_db, <span class="st">&quot;SELECT * FROM zp_size;&quot;</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="data-prep-fish-and-prey-size" class="section level2 hasAnchor" number="3.2">
@@ -224,20 +236,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p>Calculate the total number of prey within each fish</p></li>
 <li><p>Calculate the average prey length</p></li>
 </ol>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="data-cleaning.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Prep fish and prey size data</span></span>
-<span id="cb10-2"><a href="data-cleaning.html#cb10-2" aria-hidden="true" tabindex="-1"></a>avgfishpreylengthstep1 <span class="ot">&lt;-</span> diet_size <span class="sc">%&gt;%</span></span>
-<span id="cb10-3"><a href="data-cleaning.html#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(fish, <span class="at">by =</span> <span class="st">&quot;fish_id&quot;</span>) <span class="sc">%&gt;%</span> <span class="co">#Step 1</span></span>
-<span id="cb10-4"><a href="data-cleaning.html#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rowavg =</span> <span class="fu">rowMeans</span>(<span class="fu">subset</span>(diet_size, <span class="at">select =</span> <span class="fu">c</span>(<span class="dv">6</span><span class="sc">:</span><span class="dv">25</span>)), </span>
-<span id="cb10-5"><a href="data-cleaning.html#cb10-5" aria-hidden="true" tabindex="-1"></a>                           <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> <span class="co">#Step 2 </span></span>
-<span id="cb10-6"><a href="data-cleaning.html#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">over20bm =</span> <span class="fu">if_else</span>(prey_tot<span class="sc">&gt;</span><span class="dv">20</span>, (prey_tot<span class="dv">-20</span>)<span class="sc">*</span>(rowavg), <span class="dv">0</span>)) <span class="co">#Step 3</span></span>
-<span id="cb10-7"><a href="data-cleaning.html#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-8"><a href="data-cleaning.html#cb10-8" aria-hidden="true" tabindex="-1"></a>avgfishpreylength <span class="ot">&lt;-</span> avgfishpreylengthstep1 <span class="sc">%&gt;%</span></span>
-<span id="cb10-9"><a href="data-cleaning.html#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">preylengthsum =</span> <span class="fu">rowSums</span>(<span class="fu">subset</span>(avgfishpreylengthstep1, <span class="co">#Step 4</span></span>
-<span id="cb10-10"><a href="data-cleaning.html#cb10-10" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">select =</span> <span class="fu">c</span>(<span class="dv">6</span><span class="sc">:</span><span class="dv">25</span>,<span class="dv">32</span>)), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-11"><a href="data-cleaning.html#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(fish_id) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-12"><a href="data-cleaning.html#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fishpreylength =</span> <span class="fu">sum</span>(preylengthsum)) <span class="sc">%&gt;%</span> <span class="co">#Step 5</span></span>
-<span id="cb10-13"><a href="data-cleaning.html#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fishpreytot =</span> <span class="fu">sum</span>(prey_tot)) <span class="sc">%&gt;%</span> <span class="co">#Step 6</span></span>
-<span id="cb10-14"><a href="data-cleaning.html#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fishavgpreylength =</span> fishpreylength<span class="sc">/</span>fishpreytot) <span class="co">#Step 7</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="data-cleaning.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Prep fish and prey size data</span></span>
+<span id="cb9-2"><a href="data-cleaning.html#cb9-2" aria-hidden="true" tabindex="-1"></a>avgfishpreylengthstep1 <span class="ot">&lt;-</span> diet_size <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="data-cleaning.html#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(fish, <span class="at">by =</span> <span class="st">&quot;fish_id&quot;</span>) <span class="sc">%&gt;%</span> <span class="co">#Step 1</span></span>
+<span id="cb9-4"><a href="data-cleaning.html#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rowavg =</span> <span class="fu">rowMeans</span>(<span class="fu">subset</span>(diet_size, <span class="at">select =</span> <span class="fu">c</span>(<span class="dv">6</span><span class="sc">:</span><span class="dv">25</span>)), </span>
+<span id="cb9-5"><a href="data-cleaning.html#cb9-5" aria-hidden="true" tabindex="-1"></a>                           <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> <span class="co">#Step 2 </span></span>
+<span id="cb9-6"><a href="data-cleaning.html#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">over20bm =</span> <span class="fu">if_else</span>(prey_tot<span class="sc">&gt;</span><span class="dv">20</span>, (prey_tot<span class="dv">-20</span>)<span class="sc">*</span>(rowavg), <span class="dv">0</span>)) <span class="co">#Step 3</span></span>
+<span id="cb9-7"><a href="data-cleaning.html#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="data-cleaning.html#cb9-8" aria-hidden="true" tabindex="-1"></a>avgfishpreylength <span class="ot">&lt;-</span> avgfishpreylengthstep1 <span class="sc">%&gt;%</span></span>
+<span id="cb9-9"><a href="data-cleaning.html#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">preylengthsum =</span> <span class="fu">rowSums</span>(<span class="fu">subset</span>(avgfishpreylengthstep1, <span class="co">#Step 4</span></span>
+<span id="cb9-10"><a href="data-cleaning.html#cb9-10" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">select =</span> <span class="fu">c</span>(<span class="dv">6</span><span class="sc">:</span><span class="dv">25</span>,<span class="dv">32</span>)), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-11"><a href="data-cleaning.html#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(fish_id) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-12"><a href="data-cleaning.html#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fishpreylength =</span> <span class="fu">sum</span>(preylengthsum)) <span class="sc">%&gt;%</span> <span class="co">#Step 5</span></span>
+<span id="cb9-13"><a href="data-cleaning.html#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fishpreytot =</span> <span class="fu">sum</span>(prey_tot)) <span class="sc">%&gt;%</span> <span class="co">#Step 6</span></span>
+<span id="cb9-14"><a href="data-cleaning.html#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">fishavgpreylength =</span> fishpreylength<span class="sc">/</span>fishpreytot) <span class="co">#Step 7</span></span></code></pre></div>
 </div>
 </div>
 <div id="data-prep-prey-selectivity" class="section level2 hasAnchor" number="3.3">
@@ -254,27 +266,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p>Add a column stating that this is water column data</p></li>
 <li><p>Rename zp_order to category</p></li>
 </ol>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="data-cleaning.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Prep the water column data</span></span>
-<span id="cb11-2"><a href="data-cleaning.html#cb11-2" aria-hidden="true" tabindex="-1"></a>zpwc <span class="ot">&lt;-</span> zp_biomass <span class="sc">%&gt;%</span></span>
-<span id="cb11-3"><a href="data-cleaning.html#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(covemonth) <span class="sc">%&gt;%</span></span>
-<span id="cb11-4"><a href="data-cleaning.html#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sites_tot =</span> <span class="fu">length</span>(<span class="fu">unique</span>(site))) <span class="sc">%&gt;%</span></span>
-<span id="cb11-5"><a href="data-cleaning.html#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> <span class="co">#Step 1</span></span>
-<span id="cb11-6"><a href="data-cleaning.html#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(covemonth, zp_genus) <span class="sc">%&gt;%</span></span>
-<span id="cb11-7"><a href="data-cleaning.html#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cmavgindiv =</span> <span class="fu">sum</span>(zp_indiv_per_m3)<span class="sc">/</span>sites_tot) <span class="sc">%&gt;%</span> </span>
-<span id="cb11-8"><a href="data-cleaning.html#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(zp_id, site, zp_indiv_per_m3, zp_microg_per_m3)) <span class="sc">%&gt;%</span></span>
-<span id="cb11-9"><a href="data-cleaning.html#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb11-10"><a href="data-cleaning.html#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> <span class="co">#Step 2</span></span>
-<span id="cb11-11"><a href="data-cleaning.html#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(covemonth, zp_order) <span class="sc">%&gt;%</span></span>
-<span id="cb11-12"><a href="data-cleaning.html#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cattot =</span> <span class="fu">sum</span>(cmavgindiv)) <span class="sc">%&gt;%</span></span>
-<span id="cb11-13"><a href="data-cleaning.html#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> <span class="co">#Step 3</span></span>
-<span id="cb11-14"><a href="data-cleaning.html#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(covemonth) <span class="sc">%&gt;%</span></span>
-<span id="cb11-15"><a href="data-cleaning.html#cb11-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">covmonthtot =</span> <span class="fu">sum</span>(cmavgindiv)) <span class="sc">%&gt;%</span></span>
-<span id="cb11-16"><a href="data-cleaning.html#cb11-16" aria-hidden="true" tabindex="-1"></a>  ungroup <span class="sc">%&gt;%</span> <span class="co">#Step 4</span></span>
-<span id="cb11-17"><a href="data-cleaning.html#cb11-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perctot =</span> cattot<span class="sc">/</span>covmonthtot) <span class="sc">%&gt;%</span> <span class="co">#Step 5</span></span>
-<span id="cb11-18"><a href="data-cleaning.html#cb11-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="dv">11</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb11-19"><a href="data-cleaning.html#cb11-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="sc">%&gt;%</span> <span class="co">#Step 6</span></span>
-<span id="cb11-20"><a href="data-cleaning.html#cb11-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gutwater =</span> <span class="st">&quot;water column&quot;</span>) <span class="sc">%&gt;%</span> <span class="co">#Step 7</span></span>
-<span id="cb11-21"><a href="data-cleaning.html#cb11-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">category =</span> zp_order) <span class="co">#Step 8</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="data-cleaning.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Prep the water column data</span></span>
+<span id="cb10-2"><a href="data-cleaning.html#cb10-2" aria-hidden="true" tabindex="-1"></a>zpwc <span class="ot">&lt;-</span> zp_biomass <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="data-cleaning.html#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(covemonth) <span class="sc">%&gt;%</span></span>
+<span id="cb10-4"><a href="data-cleaning.html#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sites_tot =</span> <span class="fu">length</span>(<span class="fu">unique</span>(site))) <span class="sc">%&gt;%</span></span>
+<span id="cb10-5"><a href="data-cleaning.html#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> <span class="co">#Step 1</span></span>
+<span id="cb10-6"><a href="data-cleaning.html#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(covemonth, zp_genus) <span class="sc">%&gt;%</span></span>
+<span id="cb10-7"><a href="data-cleaning.html#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cmavgindiv =</span> <span class="fu">sum</span>(zp_indiv_per_m3)<span class="sc">/</span>sites_tot) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-8"><a href="data-cleaning.html#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(zp_id, site, zp_indiv_per_m3, zp_microg_per_m3)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-9"><a href="data-cleaning.html#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb10-10"><a href="data-cleaning.html#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> <span class="co">#Step 2</span></span>
+<span id="cb10-11"><a href="data-cleaning.html#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(covemonth, zp_order) <span class="sc">%&gt;%</span></span>
+<span id="cb10-12"><a href="data-cleaning.html#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cattot =</span> <span class="fu">sum</span>(cmavgindiv)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-13"><a href="data-cleaning.html#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> <span class="co">#Step 3</span></span>
+<span id="cb10-14"><a href="data-cleaning.html#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(covemonth) <span class="sc">%&gt;%</span></span>
+<span id="cb10-15"><a href="data-cleaning.html#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">covmonthtot =</span> <span class="fu">sum</span>(cmavgindiv)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-16"><a href="data-cleaning.html#cb10-16" aria-hidden="true" tabindex="-1"></a>  ungroup <span class="sc">%&gt;%</span> <span class="co">#Step 4</span></span>
+<span id="cb10-17"><a href="data-cleaning.html#cb10-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perctot =</span> cattot<span class="sc">/</span>covmonthtot) <span class="sc">%&gt;%</span> <span class="co">#Step 5</span></span>
+<span id="cb10-18"><a href="data-cleaning.html#cb10-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="dv">11</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-19"><a href="data-cleaning.html#cb10-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="sc">%&gt;%</span> <span class="co">#Step 6</span></span>
+<span id="cb10-20"><a href="data-cleaning.html#cb10-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gutwater =</span> <span class="st">&quot;watercolumn&quot;</span>) <span class="sc">%&gt;%</span> <span class="co">#Step 7</span></span>
+<span id="cb10-21"><a href="data-cleaning.html#cb10-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">category =</span> zp_order) <span class="co">#Step 8</span></span>
+<span id="cb10-22"><a href="data-cleaning.html#cb10-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-23"><a href="data-cleaning.html#cb10-23" aria-hidden="true" tabindex="-1"></a>zpwc<span class="sc">$</span>category <span class="ot">&lt;-</span> <span class="fu">str_replace_all</span>(zpwc<span class="sc">$</span>category, <span class="st">&#39;Cyclopoida&#39;</span>, <span class="st">&#39;Copepoda&#39;</span>)</span></code></pre></div>
 </div>
 <div id="the-steps-for-the-prey-data-preparation-are-as-follows" class="section level3 hasAnchor" number="3.3.2">
 <h3><span class="header-section-number">3.3.2</span> The steps for the prey data preparation are as follows:<a href="data-cleaning.html#the-steps-for-the-prey-data-preparation-are-as-follows" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -288,39 +302,65 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p>Reorder the columns to desired structure</p></li>
 <li><p>Rename prey_cat to category</p></li>
 </ol>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="data-cleaning.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Prep the gut content data</span></span>
-<span id="cb12-2"><a href="data-cleaning.html#cb12-2" aria-hidden="true" tabindex="-1"></a>zpgc <span class="ot">&lt;-</span> diet <span class="sc">%&gt;%</span></span>
-<span id="cb12-3"><a href="data-cleaning.html#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(fish, <span class="at">by =</span> <span class="st">&quot;fish_id&quot;</span>) <span class="sc">%&gt;%</span> <span class="co">#Step 1</span></span>
-<span id="cb12-4"><a href="data-cleaning.html#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(covemonth, prey_cat) <span class="sc">%&gt;%</span></span>
-<span id="cb12-5"><a href="data-cleaning.html#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cattot =</span> <span class="fu">sum</span>(total)) <span class="sc">%&gt;%</span></span>
-<span id="cb12-6"><a href="data-cleaning.html#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> <span class="co">#Step 2</span></span>
-<span id="cb12-7"><a href="data-cleaning.html#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(covemonth) <span class="sc">%&gt;%</span></span>
-<span id="cb12-8"><a href="data-cleaning.html#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">covmonthtot =</span> <span class="fu">sum</span>(total)) <span class="sc">%&gt;%</span></span>
-<span id="cb12-9"><a href="data-cleaning.html#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> <span class="co">#Step 3</span></span>
-<span id="cb12-10"><a href="data-cleaning.html#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perctot =</span> cattot<span class="sc">/</span>covmonthtot) <span class="sc">%&gt;%</span> <span class="co">#Step 4</span></span>
-<span id="cb12-11"><a href="data-cleaning.html#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="dv">4</span>, <span class="dv">7</span><span class="sc">:</span><span class="dv">9</span>, <span class="dv">14</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb12-12"><a href="data-cleaning.html#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="sc">%&gt;%</span> <span class="co">#Step 5</span></span>
-<span id="cb12-13"><a href="data-cleaning.html#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gutwater =</span> <span class="st">&quot;gut&quot;</span>) <span class="sc">%&gt;%</span> <span class="co">#Step 6</span></span>
-<span id="cb12-14"><a href="data-cleaning.html#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(prey_cat, <span class="at">.after =</span> covemonth) <span class="sc">%&gt;%</span> <span class="co">#Step 7</span></span>
-<span id="cb12-15"><a href="data-cleaning.html#cb12-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">category =</span> prey_cat) <span class="co">#Step 8</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="data-cleaning.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Prep the gut content data</span></span>
+<span id="cb11-2"><a href="data-cleaning.html#cb11-2" aria-hidden="true" tabindex="-1"></a>zpgc <span class="ot">&lt;-</span> diet <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="data-cleaning.html#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(fish, <span class="at">by =</span> <span class="st">&quot;fish_id&quot;</span>) <span class="sc">%&gt;%</span> <span class="co">#Step 1</span></span>
+<span id="cb11-4"><a href="data-cleaning.html#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(covemonth, prey_cat) <span class="sc">%&gt;%</span></span>
+<span id="cb11-5"><a href="data-cleaning.html#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cattot =</span> <span class="fu">sum</span>(total)) <span class="sc">%&gt;%</span></span>
+<span id="cb11-6"><a href="data-cleaning.html#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> <span class="co">#Step 2</span></span>
+<span id="cb11-7"><a href="data-cleaning.html#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(covemonth) <span class="sc">%&gt;%</span></span>
+<span id="cb11-8"><a href="data-cleaning.html#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">covmonthtot =</span> <span class="fu">sum</span>(total)) <span class="sc">%&gt;%</span></span>
+<span id="cb11-9"><a href="data-cleaning.html#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> <span class="co">#Step 3</span></span>
+<span id="cb11-10"><a href="data-cleaning.html#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perctot =</span> cattot<span class="sc">/</span>covmonthtot) <span class="sc">%&gt;%</span> <span class="co">#Step 4</span></span>
+<span id="cb11-11"><a href="data-cleaning.html#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="dv">4</span>, <span class="dv">7</span><span class="sc">:</span><span class="dv">9</span>, <span class="dv">14</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb11-12"><a href="data-cleaning.html#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="sc">%&gt;%</span> <span class="co">#Step 5</span></span>
+<span id="cb11-13"><a href="data-cleaning.html#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gutwater =</span> <span class="st">&quot;gut&quot;</span>) <span class="sc">%&gt;%</span> <span class="co">#Step 6</span></span>
+<span id="cb11-14"><a href="data-cleaning.html#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(prey_cat, <span class="at">.after =</span> covemonth) <span class="sc">%&gt;%</span> <span class="co">#Step 7</span></span>
+<span id="cb11-15"><a href="data-cleaning.html#cb11-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">category =</span> prey_cat) <span class="co">#Step 8</span></span></code></pre></div>
 </div>
-<div id="the-steps-for-combining-the-data-sets-are-as-follows" class="section level3 hasAnchor" number="3.3.3">
-<h3><span class="header-section-number">3.3.3</span> The steps for combining the data sets are as follows:<a href="data-cleaning.html#the-steps-for-combining-the-data-sets-are-as-follows" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="the-steps-for-combining-the-data-sets-and-calculating-selectivity-are-as-follows" class="section level3 hasAnchor" number="3.3.3">
+<h3><span class="header-section-number">3.3.3</span> The steps for combining the data sets and calculating selectivity are as follows:<a href="data-cleaning.html#the-steps-for-combining-the-data-sets-and-calculating-selectivity-are-as-follows" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
 <li><p>Bind the two datasets</p></li>
-<li><p>Filter the dataset to only include the top four categories— Cladocera, Ostracoda, Copepoda, Ploima</p></li>
+<li><p>Filter the dataset to only include the top four categories— Cladocera, Copepoda, Ploima</p></li>
 <li><p>Factor the month levels</p></li>
 <li><p>Factor the cove levels</p></li>
 </ol>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="data-cleaning.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Create data set with water column and gut content data</span></span>
-<span id="cb13-2"><a href="data-cleaning.html#cb13-2" aria-hidden="true" tabindex="-1"></a>zpwcgc <span class="ot">&lt;-</span> <span class="fu">rbind</span>(zpwc, zpgc) <span class="sc">%&gt;%</span></span>
-<span id="cb13-3"><a href="data-cleaning.html#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(category <span class="sc">==</span> <span class="st">&quot;Cladocera&quot;</span> <span class="sc">|</span> </span>
-<span id="cb13-4"><a href="data-cleaning.html#cb13-4" aria-hidden="true" tabindex="-1"></a>           category <span class="sc">==</span> <span class="st">&quot;Ostracoda&quot;</span> <span class="sc">|</span> </span>
-<span id="cb13-5"><a href="data-cleaning.html#cb13-5" aria-hidden="true" tabindex="-1"></a>           category <span class="sc">==</span> <span class="st">&quot;Copepoda&quot;</span> <span class="sc">|</span> </span>
-<span id="cb13-6"><a href="data-cleaning.html#cb13-6" aria-hidden="true" tabindex="-1"></a>           category <span class="sc">==</span> <span class="st">&quot;Ploima&quot;</span>)</span>
-<span id="cb13-7"><a href="data-cleaning.html#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-8"><a href="data-cleaning.html#cb13-8" aria-hidden="true" tabindex="-1"></a>zpwcgc<span class="sc">$</span>month <span class="ot">&lt;-</span> <span class="fu">factor</span>(zpwcgc<span class="sc">$</span>month, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;June&quot;</span>, <span class="st">&quot;July&quot;</span>, <span class="st">&quot;August&quot;</span>, <span class="st">&quot;September&quot;</span>))</span>
-<span id="cb13-9"><a href="data-cleaning.html#cb13-9" aria-hidden="true" tabindex="-1"></a>zpwcgc<span class="sc">$</span>cove <span class="ot">&lt;-</span> <span class="fu">factor</span>(zpwcgc<span class="sc">$</span>cove, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;wethersfield&quot;</span>, <span class="st">&quot;chapman&quot;</span>, <span class="st">&quot;hamburg&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="data-cleaning.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Create data set with water column and gut content data</span></span>
+<span id="cb12-2"><a href="data-cleaning.html#cb12-2" aria-hidden="true" tabindex="-1"></a>zpwcgc <span class="ot">&lt;-</span> <span class="fu">rbind</span>(zpwc, zpgc) <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="data-cleaning.html#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(category <span class="sc">==</span> <span class="st">&quot;Cladocera&quot;</span> <span class="sc">|</span> </span>
+<span id="cb12-4"><a href="data-cleaning.html#cb12-4" aria-hidden="true" tabindex="-1"></a>           category <span class="sc">==</span> <span class="st">&quot;Copepoda&quot;</span> <span class="sc">|</span> </span>
+<span id="cb12-5"><a href="data-cleaning.html#cb12-5" aria-hidden="true" tabindex="-1"></a>           category <span class="sc">==</span> <span class="st">&quot;Ploima&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-6"><a href="data-cleaning.html#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(month <span class="sc">==</span> <span class="st">&quot;July&quot;</span> <span class="sc">|</span></span>
+<span id="cb12-7"><a href="data-cleaning.html#cb12-7" aria-hidden="true" tabindex="-1"></a>           month <span class="sc">==</span> <span class="st">&quot;August&quot;</span> <span class="sc">|</span></span>
+<span id="cb12-8"><a href="data-cleaning.html#cb12-8" aria-hidden="true" tabindex="-1"></a>           month <span class="sc">==</span> <span class="st">&quot;September&quot;</span>)</span>
+<span id="cb12-9"><a href="data-cleaning.html#cb12-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb12-10"><a href="data-cleaning.html#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="data-cleaning.html#cb12-11" aria-hidden="true" tabindex="-1"></a>zpwcgc<span class="sc">$</span>month <span class="ot">&lt;-</span> <span class="fu">factor</span>(zpwcgc<span class="sc">$</span>month, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;July&quot;</span>, <span class="st">&quot;August&quot;</span>, <span class="st">&quot;September&quot;</span>))</span>
+<span id="cb12-12"><a href="data-cleaning.html#cb12-12" aria-hidden="true" tabindex="-1"></a>zpwcgc<span class="sc">$</span>cove <span class="ot">&lt;-</span> <span class="fu">factor</span>(zpwcgc<span class="sc">$</span>cove, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;wethersfield&quot;</span>, <span class="st">&quot;chapman&quot;</span>, <span class="st">&quot;hamburg&quot;</span>))</span>
+<span id="cb12-13"><a href="data-cleaning.html#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="data-cleaning.html#cb12-14" aria-hidden="true" tabindex="-1"></a>zpwcgcwide <span class="ot">&lt;-</span> zpwcgc <span class="sc">%&gt;%</span></span>
+<span id="cb12-15"><a href="data-cleaning.html#cb12-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> gutwater,</span>
+<span id="cb12-16"><a href="data-cleaning.html#cb12-16" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> perctot) <span class="sc">%&gt;%</span></span>
+<span id="cb12-17"><a href="data-cleaning.html#cb12-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">selectivity =</span> (gut<span class="sc">-</span>watercolumn)<span class="sc">/</span>(gut<span class="sc">+</span>watercolumn))</span>
+<span id="cb12-18"><a href="data-cleaning.html#cb12-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-19"><a href="data-cleaning.html#cb12-19" aria-hidden="true" tabindex="-1"></a>zpwcgcwide[<span class="dv">9</span>,<span class="dv">6</span>] <span class="ot">=</span> <span class="dv">0</span> <span class="co">#Replace NA under Wethersfield/September/Ploima with actual 0</span></span>
+<span id="cb12-20"><a href="data-cleaning.html#cb12-20" aria-hidden="true" tabindex="-1"></a>zpwcgcwide[<span class="dv">27</span>,<span class="dv">5</span>] <span class="ot">=</span> <span class="dv">0</span> <span class="co">#Replace NA under Chapman/July/Copepoda with actual 0</span></span>
+<span id="cb12-21"><a href="data-cleaning.html#cb12-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-22"><a href="data-cleaning.html#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="co">#Cannot calculate selectivity values for Ostracoda because they were not sampled</span></span>
+<span id="cb12-23"><a href="data-cleaning.html#cb12-23" aria-hidden="true" tabindex="-1"></a><span class="co">#from the environment. Instead a data set for Ostracoda percent of total prey</span></span>
+<span id="cb12-24"><a href="data-cleaning.html#cb12-24" aria-hidden="true" tabindex="-1"></a><span class="co">#items is needed created</span></span>
+<span id="cb12-25"><a href="data-cleaning.html#cb12-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-26"><a href="data-cleaning.html#cb12-26" aria-hidden="true" tabindex="-1"></a>ostra <span class="ot">&lt;-</span> zpgc <span class="sc">%&gt;%</span></span>
+<span id="cb12-27"><a href="data-cleaning.html#cb12-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(category <span class="sc">==</span> <span class="st">&quot;Ostracoda&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-28"><a href="data-cleaning.html#cb12-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span> (<span class="at">cove =</span> <span class="st">&quot;wethersfield&quot;</span>, <span class="at">month =</span> <span class="st">&quot;July&quot;</span>, </span>
+<span id="cb12-29"><a href="data-cleaning.html#cb12-29" aria-hidden="true" tabindex="-1"></a>           <span class="at">covemonth =</span> <span class="st">&quot;wethersfieldJuly&quot;</span>, <span class="at">category =</span> <span class="st">&quot;Ostracoda&quot;</span>, <span class="at">perctot =</span> <span class="dv">0</span>, </span>
+<span id="cb12-30"><a href="data-cleaning.html#cb12-30" aria-hidden="true" tabindex="-1"></a>           <span class="at">gutwater =</span> <span class="st">&quot;gut&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-31"><a href="data-cleaning.html#cb12-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">actperc =</span> perctot <span class="sc">*</span> <span class="dv">100</span>)</span>
+<span id="cb12-32"><a href="data-cleaning.html#cb12-32" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Add a row with actual 0 for Wethersfield/July/Ostracoda</span></span>
+<span id="cb12-33"><a href="data-cleaning.html#cb12-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-34"><a href="data-cleaning.html#cb12-34" aria-hidden="true" tabindex="-1"></a>ostra<span class="sc">$</span>month <span class="ot">&lt;-</span> <span class="fu">factor</span>(ostra<span class="sc">$</span>month, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;July&quot;</span>, <span class="st">&quot;August&quot;</span>, <span class="st">&quot;September&quot;</span>))</span>
+<span id="cb12-35"><a href="data-cleaning.html#cb12-35" aria-hidden="true" tabindex="-1"></a>ostra<span class="sc">$</span>cove <span class="ot">&lt;-</span> <span class="fu">factor</span>(ostra<span class="sc">$</span>cove, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;wethersfield&quot;</span>, <span class="st">&quot;chapman&quot;</span>, <span class="st">&quot;hamburg&quot;</span>))</span></code></pre></div>
 
 </div>
 </div>
@@ -331,7 +371,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         </div>
       </div>
 <a href="database-creation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="data-visualizations.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

@@ -20,4 +20,10 @@ the-steps-for-the-data-preparation-are-as-follows
 data-prep-prey-selectivity
 the-steps-for-the-zooplankton-data-preparation-are-as-follows
 the-steps-for-the-prey-data-preparation-are-as-follows
-the-steps-for-combining-the-data-sets-are-as-follows
+the-steps-for-combining-the-data-sets-and-calculating-selectivity-are-as-follows
+data-visualizations
+scatterplots-fish-and-prey
+use-ggplot-to-create-a-scatterplot-of-average-prey-length-by-fish-length
+use-ggplot-to-create-a-scatterplot-of-average-prey-length-by-fish-age
+selectivity-plot
+use-ggplot-to-create-a-graph-of-selectivity-of-different-prey-categories-across-months-and-sites
