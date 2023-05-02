@@ -12,9 +12,10 @@ create-diet-table
 create-diet_size-table
 create-zp_biomass-table
 create-zp_size-table
+check-data
 data-cleaning
 load-data
-load-the-river-herring-database-and-all-the-tables-it-contains
+load-the-river-herring-database-and-its-tables
 data-prep-fish-and-prey-size
 the-steps-for-the-data-preparation-are-as-follows
 data-prep-prey-selectivity

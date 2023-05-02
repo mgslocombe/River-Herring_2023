@@ -2,7 +2,7 @@
 
 ## Load data
 
-### Load the river herring database and all the tables it contains
+### Load the river herring database and its tables
 
 ```{r, warning=FALSE, eval=FALSE}
 library(tidyverse)
@@ -61,7 +61,7 @@ avgfishpreylength <- avgfishpreylengthstep1 %>%
 
 ### The steps for the zooplankton data preparation are as follows:
 
-1. Calculate total number of sites sampled in cove for that month
+1. Calculate total number of sites sampled in each cove for that month
   
 2. Calculate the average number of individuals per zooplankton category across sampling sites for each cove month combo
   
@@ -69,7 +69,7 @@ avgfishpreylength <- avgfishpreylengthstep1 %>%
   
 4. Calculate the total number of individuals sampled at each cove month combo
   
-5. Calculate the percent of the total number of indiviuals that each zooplankton category is for each cove month combo
+5. Calculate the percent of the total zooplankton individuals that each zooplankton category makes up in each cove month combo
   
 6. Simplify data set to needed columns and rows
   
@@ -111,7 +111,7 @@ zpwc$category <- str_replace_all(zpwc$category, 'Cyclopoida', 'Copepoda')
   
 3. Calculate the total number of prey individuals sampled at each cove month combo
   
-4. Calculate the percent of the total number of prey that each zooplankton category is for each cove month combo
+4. Calculate the percent of the total prey that each prey category is for each cove month combo
   
 5. Simplify data set to needed columns and rows
   
@@ -142,49 +142,64 @@ zpgc <- diet %>%
 
 ### The steps for combining the data sets and calculating selectivity are as follows:
 
-1. Bind the two datasets
+1. Bind the two data sets
   
-2. Filter the dataset to only include the top four categories--- Cladocera, Copepoda, Ploima
+2. Filter the data set to only include the top three categories--- Cladocera, Copepoda, Ploima
+
+3. Filter the data set to only include July, August, and September
   
-3. Factor the month levels
-  
-4. Factor the cove levels
+4. Factor the month and cove levels
+
+5. Pivot the data set wider
+
+6. Add in actual 0s
+
+7. Create data set for Ostracoda
+
+8. Add row for Wethersfield data in July
+
+9. Convert to percent
+
+10. Factor month and cove levels
 
 ```{r, warning=FALSE, eval=FALSE}
 #Create data set with water column and gut content data
-zpwcgc <- rbind(zpwc, zpgc) %>%
+zpwcgc <- rbind(zpwc, zpgc) %>% #Step 1
   filter(category == "Cladocera" | 
            category == "Copepoda" | 
-           category == "Ploima") %>%
+           category == "Ploima") %>% #Step 2
   filter(month == "July" |
            month == "August" |
-           month == "September")
+           month == "September") #Step 3
   
 
-zpwcgc$month <- factor(zpwcgc$month, levels = c("July", "August", "September"))
-zpwcgc$cove <- factor(zpwcgc$cove, levels = c("wethersfield", "chapman", "hamburg"))
+zpwcgc$month <- factor(zpwcgc$month, levels = c("July", "August", 
+                                                "September"))
+zpwcgc$cove <- factor(zpwcgc$cove, levels = c("wethersfield", "chapman", 
+                                              "hamburg")) #Step 4
 
 zpwcgcwide <- zpwcgc %>%
   pivot_wider(names_from = gutwater,
               values_from = perctot) %>%
-  mutate(selectivity = (gut-watercolumn)/(gut+watercolumn))
+  mutate(selectivity = (gut-watercolumn)/(gut+watercolumn)) #Step 5
 
-zpwcgcwide[9,6] = 0 #Replace NA under Wethersfield/September/Ploima with actual 0
-zpwcgcwide[27,5] = 0 #Replace NA under Chapman/July/Copepoda with actual 0
+zpwcgcwide[9,6] = 0 #Replace NA in Wethersfield/Sept/Ploima with actual 0
+zpwcgcwide[27,5] = 0 #Replace NA in Chapman/July/Copepoda with actual 0 #Step 6
 
 #Cannot calculate selectivity values for Ostracoda because they were not sampled
 #from the environment. Instead a data set for Ostracoda percent of total prey
 #items is needed created
 
 ostra <- zpgc %>%
-  filter(category == "Ostracoda") %>%
+  filter(category == "Ostracoda") %>% #Step 7
   add_row (cove = "wethersfield", month = "July", 
            covemonth = "wethersfieldJuly", category = "Ostracoda", perctot = 0, 
-           gutwater = "gut") %>%
-  mutate(actperc = perctot * 100)
+           gutwater = "gut") %>% #Step 8
+  mutate(actperc = perctot * 100) #Step 9
   #Add a row with actual 0 for Wethersfield/July/Ostracoda
 
 ostra$month <- factor(ostra$month, levels = c("July", "August", "September"))
-ostra$cove <- factor(ostra$cove, levels = c("wethersfield", "chapman", "hamburg"))
+ostra$cove <- factor(ostra$cove, levels = c("wethersfield", "chapman", 
+                                            "hamburg")) #Step 10
 
 ```

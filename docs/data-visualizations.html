@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="data-cleaning.html"/>
-<link rel="next" href="references.html"/>
+
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -150,12 +150,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.5" data-path="database-creation.html"><a href="database-creation.html#create-diet_size-table"><i class="fa fa-check"></i><b>2.5</b> Create <strong>DIET_SIZE</strong> table</a></li>
 <li class="chapter" data-level="2.6" data-path="database-creation.html"><a href="database-creation.html#create-zp_biomass-table"><i class="fa fa-check"></i><b>2.6</b> Create <strong>ZP_BIOMASS</strong> table</a></li>
 <li class="chapter" data-level="2.7" data-path="database-creation.html"><a href="database-creation.html#create-zp_size-table"><i class="fa fa-check"></i><b>2.7</b> Create <strong>ZP_SIZE</strong> table</a></li>
+<li class="chapter" data-level="2.8" data-path="database-creation.html"><a href="database-creation.html#check-data"><i class="fa fa-check"></i><b>2.8</b> Check data</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="data-cleaning.html"><a href="data-cleaning.html"><i class="fa fa-check"></i><b>3</b> Data Cleaning</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="data-cleaning.html"><a href="data-cleaning.html#load-data"><i class="fa fa-check"></i><b>3.1</b> Load data</a>
 <ul>
-<li class="chapter" data-level="3.1.1" data-path="data-cleaning.html"><a href="data-cleaning.html#load-the-river-herring-database-and-all-the-tables-it-contains"><i class="fa fa-check"></i><b>3.1.1</b> Load the river herring database and all the tables it contains</a></li>
+<li class="chapter" data-level="3.1.1" data-path="data-cleaning.html"><a href="data-cleaning.html#load-the-river-herring-database-and-its-tables"><i class="fa fa-check"></i><b>3.1.1</b> Load the river herring database and its tables</a></li>
 </ul></li>
 <li class="chapter" data-level="3.2" data-path="data-cleaning.html"><a href="data-cleaning.html#data-prep-fish-and-prey-size"><i class="fa fa-check"></i><b>3.2</b> Data prep, fish and prey size</a>
 <ul>
@@ -180,7 +181,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.2.1" data-path="data-visualizations.html"><a href="data-visualizations.html#use-ggplot-to-create-a-graph-of-selectivity-of-different-prey-categories-across-months-and-sites"><i class="fa fa-check"></i><b>4.2.1</b> Use ggplot to create a graph of selectivity of different prey categories across months and sites</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -207,30 +207,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">4.1</span> Scatterplots, fish and prey<a href="data-visualizations.html#scatterplots-fish-and-prey" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="use-ggplot-to-create-a-scatterplot-of-average-prey-length-by-fish-length" class="section level3 hasAnchor" number="4.1.1">
 <h3><span class="header-section-number">4.1.1</span> Use ggplot to create a scatterplot of average prey length by fish length<a href="data-visualizations.html#use-ggplot-to-create-a-scatterplot-of-average-prey-length-by-fish-length" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="data-visualizations.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
-<span id="cb13-2"><a href="data-visualizations.html#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="data-visualizations.html#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(avgfishpreylength, <span class="fu">aes</span>(<span class="at">x =</span> TL_mm, <span class="at">y =</span> fishavgpreylength, </span>
-<span id="cb13-4"><a href="data-visualizations.html#cb13-4" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">color =</span> month, <span class="at">shape =</span> cove)) <span class="sc">+</span></span>
-<span id="cb13-5"><a href="data-visualizations.html#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb13-6"><a href="data-visualizations.html#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb13-7"><a href="data-visualizations.html#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Fish total length (mm)&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Average prey length (micrometers)&quot;</span>,</span>
-<span id="cb13-8"><a href="data-visualizations.html#cb13-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Month of Collection&quot;</span>, <span class="at">shape =</span>  <span class="st">&quot;Collected from&quot;</span>) <span class="sc">+</span></span>
-<span id="cb13-9"><a href="data-visualizations.html#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_shape_discrete</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Chapman Pond&quot;</span>,</span>
-<span id="cb13-10"><a href="data-visualizations.html#cb13-10" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">&quot;Hamburg Cove&quot;</span>,</span>
-<span id="cb13-11"><a href="data-visualizations.html#cb13-11" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">&quot;Wethersfield Cove&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="data-visualizations.html#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb25-2"><a href="data-visualizations.html#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="data-visualizations.html#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(avgfishpreylength, <span class="fu">aes</span>(<span class="at">x =</span> TL_mm, <span class="at">y =</span> fishavgpreylength, </span>
+<span id="cb25-4"><a href="data-visualizations.html#cb25-4" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">color =</span> month, <span class="at">shape =</span> cove)) <span class="sc">+</span></span>
+<span id="cb25-5"><a href="data-visualizations.html#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb25-6"><a href="data-visualizations.html#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb25-7"><a href="data-visualizations.html#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Fish total length (mm)&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Average prey length (micrometers)&quot;</span>,</span>
+<span id="cb25-8"><a href="data-visualizations.html#cb25-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Month of Collection&quot;</span>, <span class="at">shape =</span>  <span class="st">&quot;Collected from&quot;</span>) <span class="sc">+</span></span>
+<span id="cb25-9"><a href="data-visualizations.html#cb25-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_shape_discrete</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Chapman Pond&quot;</span>,</span>
+<span id="cb25-10"><a href="data-visualizations.html#cb25-10" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">&quot;Hamburg Cove&quot;</span>,</span>
+<span id="cb25-11"><a href="data-visualizations.html#cb25-11" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">&quot;Wethersfield Cove&quot;</span>))</span></code></pre></div>
 <p><img src="fishpreysize.png" width="100%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="use-ggplot-to-create-a-scatterplot-of-average-prey-length-by-fish-age" class="section level3 hasAnchor" number="4.1.2">
 <h3><span class="header-section-number">4.1.2</span> Use ggplot to create a scatterplot of average prey length by fish age<a href="data-visualizations.html#use-ggplot-to-create-a-scatterplot-of-average-prey-length-by-fish-age" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="data-visualizations.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(avgfishpreylength, <span class="fu">aes</span>(<span class="at">x =</span> age_days, <span class="at">y =</span> fishavgpreylength, </span>
-<span id="cb14-2"><a href="data-visualizations.html#cb14-2" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">color =</span> month, <span class="at">shape =</span> cove)) <span class="sc">+</span></span>
-<span id="cb14-3"><a href="data-visualizations.html#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb14-4"><a href="data-visualizations.html#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb14-5"><a href="data-visualizations.html#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Fish age (days)&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Average prey length (micrometers)&quot;</span>,</span>
-<span id="cb14-6"><a href="data-visualizations.html#cb14-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Month of Collection&quot;</span>, <span class="at">shape =</span>  <span class="st">&quot;Collected from&quot;</span>) <span class="sc">+</span></span>
-<span id="cb14-7"><a href="data-visualizations.html#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_shape_discrete</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Chapman Pond&quot;</span>,</span>
-<span id="cb14-8"><a href="data-visualizations.html#cb14-8" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">&quot;Hamburg Cove&quot;</span>,</span>
-<span id="cb14-9"><a href="data-visualizations.html#cb14-9" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">&quot;Wethersfield Cove&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="data-visualizations.html#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(avgfishpreylength, <span class="fu">aes</span>(<span class="at">x =</span> age_days, <span class="at">y =</span> fishavgpreylength, </span>
+<span id="cb26-2"><a href="data-visualizations.html#cb26-2" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">color =</span> month, <span class="at">shape =</span> cove)) <span class="sc">+</span></span>
+<span id="cb26-3"><a href="data-visualizations.html#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb26-4"><a href="data-visualizations.html#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb26-5"><a href="data-visualizations.html#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Fish age (days)&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Average prey length (micrometers)&quot;</span>,</span>
+<span id="cb26-6"><a href="data-visualizations.html#cb26-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Month of Collection&quot;</span>, <span class="at">shape =</span>  <span class="st">&quot;Collected from&quot;</span>) <span class="sc">+</span></span>
+<span id="cb26-7"><a href="data-visualizations.html#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_shape_discrete</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Chapman Pond&quot;</span>,</span>
+<span id="cb26-8"><a href="data-visualizations.html#cb26-8" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">&quot;Hamburg Cove&quot;</span>,</span>
+<span id="cb26-9"><a href="data-visualizations.html#cb26-9" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">&quot;Wethersfield Cove&quot;</span>))</span></code></pre></div>
 <p><img src="agepreysize.png" width="100%" style="display: block; margin: auto;" /></p>
 </div>
 </div>
@@ -238,31 +238,31 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">4.2</span> Selectivity plot<a href="data-visualizations.html#selectivity-plot" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="use-ggplot-to-create-a-graph-of-selectivity-of-different-prey-categories-across-months-and-sites" class="section level3 hasAnchor" number="4.2.1">
 <h3><span class="header-section-number">4.2.1</span> Use ggplot to create a graph of selectivity of different prey categories across months and sites<a href="data-visualizations.html#use-ggplot-to-create-a-graph-of-selectivity-of-different-prey-categories-across-months-and-sites" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="data-visualizations.html#cb15-1" aria-hidden="true" tabindex="-1"></a>pd <span class="ot">&lt;-</span> <span class="fu">position_dodge</span>(.<span class="dv">15</span>)</span>
-<span id="cb15-2"><a href="data-visualizations.html#cb15-2" aria-hidden="true" tabindex="-1"></a>capsites_o <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;wethersfield&#39;</span> <span class="ot">=</span> <span class="st">&quot;Wethersfield&quot;</span>, <span class="st">&#39;chapman&#39;</span> <span class="ot">=</span> <span class="st">&quot;Chapman&quot;</span>, </span>
-<span id="cb15-3"><a href="data-visualizations.html#cb15-3" aria-hidden="true" tabindex="-1"></a>              <span class="st">&#39;hamburg&#39;</span> <span class="ot">=</span> <span class="st">&quot;Hamburg&quot;</span>, <span class="st">&#39;Ostracoda&#39;</span> <span class="ot">=</span> <span class="st">&quot;Ostracoda&quot;</span>)</span>
-<span id="cb15-4"><a href="data-visualizations.html#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-5"><a href="data-visualizations.html#cb15-5" aria-hidden="true" tabindex="-1"></a>capsites_z <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;wethersfield&#39;</span> <span class="ot">=</span> <span class="st">&quot;Wethersfield&quot;</span>, <span class="st">&#39;chapman&#39;</span> <span class="ot">=</span> <span class="st">&quot;Chapman&quot;</span>, </span>
-<span id="cb15-6"><a href="data-visualizations.html#cb15-6" aria-hidden="true" tabindex="-1"></a>              <span class="st">&#39;hamburg&#39;</span> <span class="ot">=</span> <span class="st">&quot;Hamburg&quot;</span>, <span class="st">&#39;Cladocera&#39;</span> <span class="ot">=</span> <span class="st">&quot;Cladocera&quot;</span>, </span>
-<span id="cb15-7"><a href="data-visualizations.html#cb15-7" aria-hidden="true" tabindex="-1"></a>              <span class="st">&#39;Copepoda&#39;</span> <span class="ot">=</span> <span class="st">&quot;Copepoda&quot;</span>, <span class="st">&#39;Ploima&#39;</span> <span class="ot">=</span> <span class="st">&quot;Ploima&quot;</span>)</span>
-<span id="cb15-8"><a href="data-visualizations.html#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-9"><a href="data-visualizations.html#cb15-9" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(zpwcgcwide, <span class="fu">aes</span>(<span class="at">x =</span> month, <span class="at">y =</span> selectivity)) <span class="sc">+</span></span>
-<span id="cb15-10"><a href="data-visualizations.html#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>( <span class="fu">aes</span>(<span class="at">group =</span> category), <span class="at">size =</span> <span class="dv">1</span>, <span class="at">position =</span> pd) <span class="sc">+</span></span>
-<span id="cb15-11"><a href="data-visualizations.html#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> pd, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
-<span id="cb15-12"><a href="data-visualizations.html#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept =</span> <span class="dv">0</span>), <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="sc">+</span></span>
-<span id="cb15-13"><a href="data-visualizations.html#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb15-14"><a href="data-visualizations.html#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;Selectivity&quot;</span>, <span class="at">x =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
-<span id="cb15-15"><a href="data-visualizations.html#cb15-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="st">&quot;category~cove&quot;</span>, <span class="at">labeller =</span> <span class="fu">as_labeller</span>(capsites_z))</span>
-<span id="cb15-16"><a href="data-visualizations.html#cb15-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-17"><a href="data-visualizations.html#cb15-17" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(ostra, <span class="fu">aes</span>(<span class="at">x =</span> month, <span class="at">y =</span> actperc)) <span class="sc">+</span></span>
-<span id="cb15-18"><a href="data-visualizations.html#cb15-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>( <span class="fu">aes</span>(<span class="at">group =</span> category), <span class="at">size =</span> <span class="dv">1</span>, <span class="at">position =</span> pd) <span class="sc">+</span></span>
-<span id="cb15-19"><a href="data-visualizations.html#cb15-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> pd, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
-<span id="cb15-20"><a href="data-visualizations.html#cb15-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>)) <span class="sc">+</span></span>
-<span id="cb15-21"><a href="data-visualizations.html#cb15-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;% of total prey&quot;</span>, <span class="at">x =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
-<span id="cb15-22"><a href="data-visualizations.html#cb15-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="st">&quot;category~cove&quot;</span>, <span class="at">labeller =</span> <span class="fu">as_labeller</span>(capsites_o))<span class="sc">+</span></span>
-<span id="cb15-23"><a href="data-visualizations.html#cb15-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">strip.text.x =</span> <span class="fu">element_blank</span>(), <span class="at">strip.background.x =</span> <span class="fu">element_blank</span>())</span>
-<span id="cb15-24"><a href="data-visualizations.html#cb15-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-25"><a href="data-visualizations.html#cb15-25" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">/</span> p2 <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">heights =</span> <span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="data-visualizations.html#cb27-1" aria-hidden="true" tabindex="-1"></a>pd <span class="ot">&lt;-</span> <span class="fu">position_dodge</span>(.<span class="dv">15</span>)</span>
+<span id="cb27-2"><a href="data-visualizations.html#cb27-2" aria-hidden="true" tabindex="-1"></a>capsites_o <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;wethersfield&#39;</span> <span class="ot">=</span> <span class="st">&quot;Wethersfield&quot;</span>, <span class="st">&#39;chapman&#39;</span> <span class="ot">=</span> <span class="st">&quot;Chapman&quot;</span>, </span>
+<span id="cb27-3"><a href="data-visualizations.html#cb27-3" aria-hidden="true" tabindex="-1"></a>              <span class="st">&#39;hamburg&#39;</span> <span class="ot">=</span> <span class="st">&quot;Hamburg&quot;</span>, <span class="st">&#39;Ostracoda&#39;</span> <span class="ot">=</span> <span class="st">&quot;Ostracoda&quot;</span>)</span>
+<span id="cb27-4"><a href="data-visualizations.html#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="data-visualizations.html#cb27-5" aria-hidden="true" tabindex="-1"></a>capsites_z <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;wethersfield&#39;</span> <span class="ot">=</span> <span class="st">&quot;Wethersfield&quot;</span>, <span class="st">&#39;chapman&#39;</span> <span class="ot">=</span> <span class="st">&quot;Chapman&quot;</span>, </span>
+<span id="cb27-6"><a href="data-visualizations.html#cb27-6" aria-hidden="true" tabindex="-1"></a>              <span class="st">&#39;hamburg&#39;</span> <span class="ot">=</span> <span class="st">&quot;Hamburg&quot;</span>, <span class="st">&#39;Cladocera&#39;</span> <span class="ot">=</span> <span class="st">&quot;Cladocera&quot;</span>, </span>
+<span id="cb27-7"><a href="data-visualizations.html#cb27-7" aria-hidden="true" tabindex="-1"></a>              <span class="st">&#39;Copepoda&#39;</span> <span class="ot">=</span> <span class="st">&quot;Copepoda&quot;</span>, <span class="st">&#39;Ploima&#39;</span> <span class="ot">=</span> <span class="st">&quot;Ploima&quot;</span>)</span>
+<span id="cb27-8"><a href="data-visualizations.html#cb27-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="data-visualizations.html#cb27-9" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(zpwcgcwide, <span class="fu">aes</span>(<span class="at">x =</span> month, <span class="at">y =</span> selectivity)) <span class="sc">+</span></span>
+<span id="cb27-10"><a href="data-visualizations.html#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>( <span class="fu">aes</span>(<span class="at">group =</span> category), <span class="at">size =</span> <span class="dv">1</span>, <span class="at">position =</span> pd) <span class="sc">+</span></span>
+<span id="cb27-11"><a href="data-visualizations.html#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> pd, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb27-12"><a href="data-visualizations.html#cb27-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept =</span> <span class="dv">0</span>), <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="sc">+</span></span>
+<span id="cb27-13"><a href="data-visualizations.html#cb27-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb27-14"><a href="data-visualizations.html#cb27-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;Selectivity&quot;</span>, <span class="at">x =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb27-15"><a href="data-visualizations.html#cb27-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="st">&quot;category~cove&quot;</span>, <span class="at">labeller =</span> <span class="fu">as_labeller</span>(capsites_z))</span>
+<span id="cb27-16"><a href="data-visualizations.html#cb27-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-17"><a href="data-visualizations.html#cb27-17" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(ostra, <span class="fu">aes</span>(<span class="at">x =</span> month, <span class="at">y =</span> actperc)) <span class="sc">+</span></span>
+<span id="cb27-18"><a href="data-visualizations.html#cb27-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>( <span class="fu">aes</span>(<span class="at">group =</span> category), <span class="at">size =</span> <span class="dv">1</span>, <span class="at">position =</span> pd) <span class="sc">+</span></span>
+<span id="cb27-19"><a href="data-visualizations.html#cb27-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> pd, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb27-20"><a href="data-visualizations.html#cb27-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>)) <span class="sc">+</span></span>
+<span id="cb27-21"><a href="data-visualizations.html#cb27-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;% of total prey&quot;</span>, <span class="at">x =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb27-22"><a href="data-visualizations.html#cb27-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="st">&quot;category~cove&quot;</span>, <span class="at">labeller =</span> <span class="fu">as_labeller</span>(capsites_o))<span class="sc">+</span></span>
+<span id="cb27-23"><a href="data-visualizations.html#cb27-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">strip.text.x =</span> <span class="fu">element_blank</span>(), <span class="at">strip.background.x =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb27-24"><a href="data-visualizations.html#cb27-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-25"><a href="data-visualizations.html#cb27-25" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">/</span> p2 <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">heights =</span> <span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">1</span>))</span></code></pre></div>
 <p><img src="selectivity.png" width="100%" style="display: block; margin: auto;" /></p>
 
 </div>
@@ -273,8 +273,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="data-cleaning.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="data-cleaning.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

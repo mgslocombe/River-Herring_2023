@@ -49,9 +49,6 @@ names(fish)
 ##Write loaded csv into sql table
 dbWriteTable(rh_db, "fish", fish, append = TRUE)
 
-##Check that data loaded properly
-dbGetQuery(rh_db, "SELECT * FROM fish LIMIT 3;")
-
 ```
 
 ## Create **ENVIR** table
@@ -84,9 +81,6 @@ names(envir)
 ##Write loaded csv into sql table
 dbWriteTable(rh_db, "envir", envir, append = TRUE)
 
-##Check that data loaded properly
-dbGetQuery(rh_db, "SELECT * FROM envir LIMIT 3;")
-
 ```
 
 ## Create **DIET** table
@@ -115,9 +109,6 @@ names(diet)
 
 ##Write loaded csv into sql table
 dbWriteTable(rh_db, "diet", diet, append = TRUE)
-
-##Check that data loaded properly
-dbGetQuery(rh_db, "SELECT * FROM diet LIMIT 3;")
 
 ```
 
@@ -167,9 +158,6 @@ names(diet_size)
 ##Write loaded csv into sql table
 dbWriteTable(rh_db, "diet_size", diet_size, append = TRUE)
 
-##Check that data loaded properly
-dbGetQuery(rh_db, "SELECT * FROM diet_size LIMIT 3;")
-
 ```
 
 ## Create **ZP_BIOMASS** table
@@ -205,9 +193,6 @@ names(zp_biomass)
 
 ##Write loaded csv into sql table
 dbWriteTable(rh_db, "zp_biomass", zp_biomass, append = TRUE)
-
-##Check that data loaded properly
-dbGetQuery(rh_db, "SELECT * FROM zp_biomass LIMIT 3;")
 
 ```
 
@@ -304,8 +289,32 @@ names(zp_size)
 ##Write loaded csv into sql table
 dbWriteTable(rh_db, "zp_size", zp_size, append = TRUE)
 
-##Check that data loaded properly
+```
+
+## Check data
+
+```{r, warning=FALSE, eval=TRUE}
+
+#Confirm that data was loaded properly
+library(DBI)
+rh_db <- dbConnect(RSQLite::SQLite(), "../DataClean/rh.db")
+
+##fish table
+dbGetQuery(rh_db, "SELECT * FROM fish LIMIT 3;")
+
+##envir table
+dbGetQuery(rh_db, "SELECT * FROM envir LIMIT 3;")
+
+##diet table
+dbGetQuery(rh_db, "SELECT * FROM diet LIMIT 3;")
+
+##diet_size table
+dbGetQuery(rh_db, "SELECT * FROM diet_size LIMIT 3;")
+
+##zp_biomass table
+dbGetQuery(rh_db, "SELECT * FROM zp_biomass LIMIT 3;")
+
+##zp_size table
 dbGetQuery(rh_db, "SELECT * FROM zp_size LIMIT 3;")
 
 ```
-

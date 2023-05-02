@@ -150,12 +150,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.5" data-path="database-creation.html"><a href="database-creation.html#create-diet_size-table"><i class="fa fa-check"></i><b>2.5</b> Create <strong>DIET_SIZE</strong> table</a></li>
 <li class="chapter" data-level="2.6" data-path="database-creation.html"><a href="database-creation.html#create-zp_biomass-table"><i class="fa fa-check"></i><b>2.6</b> Create <strong>ZP_BIOMASS</strong> table</a></li>
 <li class="chapter" data-level="2.7" data-path="database-creation.html"><a href="database-creation.html#create-zp_size-table"><i class="fa fa-check"></i><b>2.7</b> Create <strong>ZP_SIZE</strong> table</a></li>
+<li class="chapter" data-level="2.8" data-path="database-creation.html"><a href="database-creation.html#check-data"><i class="fa fa-check"></i><b>2.8</b> Check data</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="data-cleaning.html"><a href="data-cleaning.html"><i class="fa fa-check"></i><b>3</b> Data Cleaning</a>
 <ul>
 <li class="chapter" data-level="3.1" data-path="data-cleaning.html"><a href="data-cleaning.html#load-data"><i class="fa fa-check"></i><b>3.1</b> Load data</a>
 <ul>
-<li class="chapter" data-level="3.1.1" data-path="data-cleaning.html"><a href="data-cleaning.html#load-the-river-herring-database-and-all-the-tables-it-contains"><i class="fa fa-check"></i><b>3.1.1</b> Load the river herring database and all the tables it contains</a></li>
+<li class="chapter" data-level="3.1.1" data-path="data-cleaning.html"><a href="data-cleaning.html#load-the-river-herring-database-and-its-tables"><i class="fa fa-check"></i><b>3.1.1</b> Load the river herring database and its tables</a></li>
 </ul></li>
 <li class="chapter" data-level="3.2" data-path="data-cleaning.html"><a href="data-cleaning.html#data-prep-fish-and-prey-size"><i class="fa fa-check"></i><b>3.2</b> Data prep, fish and prey size</a>
 <ul>
@@ -180,7 +181,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.2.1" data-path="data-visualizations.html"><a href="data-visualizations.html#use-ggplot-to-create-a-graph-of-selectivity-of-different-prey-categories-across-months-and-sites"><i class="fa fa-check"></i><b>4.2.1</b> Use ggplot to create a graph of selectivity of different prey categories across months and sites</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -209,7 +209,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="juvenile-river-herring" class="section level1 hasAnchor" number="1">
 <h1><span class="header-section-number">Chapter 1</span> Juvenile river herring<a href="index.html#juvenile-river-herring" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>River herring (alewife <em>Alosa pseudoharengus</em> and blueback herring <em>A. aestivalis</em>) are anadromous fish and juveniles feed on zooplankton during their residence in freshwater (Figure 1.1). In lakes with high densities of planktivores, juvenile river herring can deplete food resources. These shifting zooplankton densities may influence the growth, health, and emigration timing of juvenile river herring. However, these relationships are not yet fully understood.
-This research aims to clarify the relationship between juvenile river herring and zooplankton through targeted sampling of three freshwater coves along the Connecticut River. The coves were stratified along the southern portion of the Connecticut river. Hamburg Cove is the closest to the mouth of the river, Chapman Pond is in the middle, and Wethersfield Cove is the furthest upstream. Once per month (June-September of 2019), a combination of juvenile river herring, zooplankton samples, and environmental data were collected. This website provides information on data cleaning, database building, and data analysis. Please <a href="mailto:slocombemg@gmail.com">email</a> Meghan-Grace Slocombe with any questions.</p>
+This research aims to clarify the relationship between juvenile river herring and zooplankton through targeted sampling of three freshwater coves along the Connecticut River. The coves were stratified along the southern portion of the Connecticut river. Hamburg Cove is the closest to the mouth of the river, Chapman Pond is in the middle, and Wethersfield Cove is the furthest upstream. Once per month (June-September of 2019), a combination of juvenile river herring, zooplankton samples, and environmental data were collected. This website provides information on data cleaning, database building, and data visualization. Please <a href="mailto:slocombemg@gmail.com">email</a> Meghan-Grace Slocombe with any questions.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:image1"></span>
 <img src="Fiish.png" alt="Juvenile river herring" width="100%" />
 <p class="caption">
@@ -222,7 +222,7 @@ Figure 1.1: Juvenile river herring
 </div>
 <div id="study-sites" class="section level2 hasAnchor" number="1.2">
 <h2><span class="header-section-number">1.2</span> Study Sites<a href="index.html#study-sites" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The study sites were Wethersfield Cove, Chapman Pond, and, Hamburg Cove.</p>
+<p>The study sites were Wethersfield Cove, Chapman Pond, and Hamburg Cove.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:image2"></span>
 <img src="Map.PNG" alt="Map of sampled coves along the Connecticut River, oriented with North at the top" width="70%" />
 <p class="caption">
