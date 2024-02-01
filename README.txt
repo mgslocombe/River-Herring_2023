@@ -1,5 +1,5 @@
 The River-Herring_2023 folder contains the data, code, documents, outputs, and presentations associated 
-with Meghan Slocombe's honors thesis. The thesis was completed May 2020 and now a manuscript is in the works.
+with Meghan Slocombe's honors thesis. The thesis was completed May 2020.
 
 This research is focused on juvenile river herring diets within freshwater coves. The data includes fish gut
 dissection, environmental, and water column zooplankton data.
